@@ -1,9 +1,20 @@
+---
+meta: {
+    title: "other"
+    description: "a really long description"
+}
+---
+
 # coho
 
+aaahjgkehjkgehjkgjhke
+
+😂
 
 Hallucinated API:
 
-```kotlin
+```kt
+
 val source = FileSource("/path/to/source")
 
 root {

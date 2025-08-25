@@ -1,0 +1,15 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset='UTF-8'>
+    <title>kotlin template test</title>
+    <meta property='og:title' content='kotlin template test'>
+    <meta property='og:description' content='a really long description'>
+    <meta property='og:type' content='website'>
+</head>
+<body>
+    <ul>
+        <?kt (projects as List<String>).joinToString("") { project -> "<li>$project</li>" } ?>
+    </ul>
+</body>
+</html>

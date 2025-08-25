@@ -1,10 +1,17 @@
-## So I guess I have a webpage now. I am a cool person 😎
+# i am testing
 
-Anyhow, I have nothing to put here but links. If are here it's probably not hard to find my GitHub.
-## links
-- [Shadertoy](https://www.shadertoy.com/user/fishy)
+```kt
+val source = FileSource("/path/to/source")
 
-## Progams I think are cool
-- [Obsidian (markdown editor)](https://obsidian.md/)
-- [Firefox](https://www.mozilla.org/en-US/firefox/new/)
-- [Godot game engine](https://godotengine.org/)
+root {
+    page("a") {
+        markdown(source.file("file.md"))
+        html(source.file("html-file.html"))
+    }
+}
+
+// results in this file tree
+// build/
+// build/a/file.html
+// build/a/html-file.html
+```
