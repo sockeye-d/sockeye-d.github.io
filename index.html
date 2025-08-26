@@ -8,8 +8,14 @@
     <meta property='og:type' content='website'>
 </head>
 <body>
+    <h1>
+        Hey look I have a website!
+    </h1>
+    <p>
+        Here are a few of my projects
+    </p>
     <ul>
-        <?kt (projects as List<String>).joinToString("") { project -> "<li>$project</li>" } ?>
+        <?kt (projects as List<String>).joinToString("") { project -> "<li><a href='projects/$project.html'>$project</a></li>" } ?>
     </ul>
 </body>
 </html>
