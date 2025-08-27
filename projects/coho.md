@@ -1,5 +1,10 @@
 # coho
 
-Coho is a static site generator written in Kotlin
+Coho is a static site generator written in Kotlin. It supports
+* live reload
+* simple Kotlin-based configuration
 
-It is what I am using right now
+```kt
+
+val x = 1000
+```

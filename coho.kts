@@ -1,12 +1,11 @@
 import dev.fishies.coho.core.*
-import dev.fishies.coho.markdown.*
 import java.nio.file.Path
 import kotlin.io.path.*
 
 root {
     ProcessedMarkdownFile.defaultTemplate = {
         // language=html
-        ogMetadataTemplate("<link rel='stylesheet' href='/style.css'>$it\n<script src='/highlight.js' type='module'></script>")
+        ogMetadataTemplate(ktHtmlTemplate("markdown-template.html")(it))
     }
 
     val ctx = mapOf("projects" to src.cd("projects").files("*.md").map { it.nameWithoutExtension })
@@ -14,9 +13,13 @@ root {
     ktHtml(+"index.html", ctx)
     cp(+"highlight.js")
     cp(+"style.css")
+    cp(+"font.css")
+    cp(+"color.css")
+    cp(+"favicon.ico")
+    path("fonts") {
+        src.files().forEach { it -> cp(+it.name) }
+    }
     path("projects") {
-        for (path in src.files("*.md")) {
-            md(+path.name)
-        }
+        src.files("*.md").forEach { md(+it.name) }
     }
 }

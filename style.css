@@ -1,4 +1,21 @@
-* {
-    color: black;
-    font-family: monospace;
+@import "font.css";
+@import "color.css";
+
+h1 {
+    font-family: "LiberationSerif";
+    font-weight: 800;
+}
+
+body {
+    background-color: var(--base);
+    color: var(--text);
+    font-family: "LiberationSans";
+}
+
+code {
+    font-family: "LiberationMono";
+}
+
+a {
+    color: var(--lavender);
 }

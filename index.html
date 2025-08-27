@@ -1,5 +1,6 @@
 <!DOCTYPE HTML>
 <html>
+
 <head>
     <meta charset='UTF-8'>
     <title>kotlin template test</title>
@@ -7,10 +8,9 @@
     <meta property='og:description' content='a really long description'>
     <meta property='og:type' content='website'>
 </head>
+
 <body>
-    <h1>
-        Hey look I have a website!
-    </h1>
+    <h1>a really big heading</h1>
     <p>
         Here are a few of my projects
     </p>
@@ -18,4 +18,6 @@
         <?kt (projects as List<String>).joinToString("") { project -> "<li><a href='projects/$project.html'>$project</a></li>" } ?>
     </ul>
 </body>
+<link rel='stylesheet' href='/style.css'>
+
 </html>
