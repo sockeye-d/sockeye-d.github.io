@@ -10,14 +10,29 @@
 </head>
 
 <body>
-    <h1>a really big heading</h1>
-    <p>
-        Here are a few of my projects
-    </p>
+    <div class='header'>
+        <h1>
+            fishnpotatoes' website
+        </h1>
+        <div class='links'>
+            <gap></gap>
+            <?kt
+                (projects as List<String>).joinToString("") { project ->
+                    "<a class='project-link' href='projects/$project.html'>$project</button>"
+                }
+            ?>
+        </div>
+    </div>
     <ul>
-        <?kt (projects as List<String>).joinToString("") { project -> "<li><a href='projects/$project.html'>$project</a></li>" } ?>
+        <?kt (0..200).joinToString("") { num -> "<li><a href='javascript:alert($num)'>$num</a></li>" } ?>
     </ul>
+    <footer>
+        <p align="center">
+            Built from <?kt gitHash ?>
+        </p>
+    </footer>
 </body>
 <link rel='stylesheet' href='/style.css'>
+<link rel='icon' href='/favicon.ico'>
 
 </html>
