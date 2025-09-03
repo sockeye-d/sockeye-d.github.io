@@ -10,29 +10,17 @@
 </head>
 
 <body>
-    <div class='header'>
-        <h1>
-            fishnpotatoes' website
-        </h1>
-        <div class='links'>
-            <gap></gap>
-            <?kt
-                (projects as List<String>).joinToString("") { project ->
-                    "<a class='project-link' href='projects/$project.html'>$project</button>"
-                }
-            ?>
-        </div>
-    </div>
-    <ul>
-        <?kt (0..200).joinToString("") { num -> "<li><a href='javascript:alert($num)'>$num</a></li>" } ?>
-    </ul>
-    <footer>
-        <p align="center">
-            Built from <?kt gitHash ?>
-        </p>
-    </footer>
+    <page-header></page-header>
+    <content>
+        <ul>
+            <?kt (0..25).joinToString("") { num -> "<li><a href='javascript:alert($num)'>$num</a></li>" } ?>
+        </ul>
+    </content>
+    <page-footer></page-footer>
 </body>
 <link rel='stylesheet' href='/style.css'>
 <link rel='icon' href='/favicon.ico'>
+<script src="components/header.js" type="text/javascript" defer></script>
+<script src="components/footer.js" type="text/javascript" defer></script>
 
 </html>

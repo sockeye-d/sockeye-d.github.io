@@ -4,7 +4,8 @@ Coho is a static site generator written in Kotlin. It supports
 * live reload
 * simple Kotlin-based configuration
 
-```kt
+[link](/projects/godl.md)
 
-val x = 1000
+```kt
+val x = 1000 // a random number
 ```

@@ -3,39 +3,69 @@
 
 h1 {
     font-family: "LiberationSerif";
-    font-weight: 800;
+    font-weight: bold;
+    margin-top: 8px;
+    margin-bottom: 8px;
 }
 
 body {
-    background-color: var(--base);
+    background-color: var(--mantle);
     color: var(--text);
     font-family: "LiberationSans";
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    min-height: 100vh;
+}
+
+content {
+    padding: 8px;
+    background-color: var(--base);
+/*     min-height: calc(100vh - 52px - 51px - 16px); */
+    border-radius: 8px;
+    flex: 1 1 auto;
 }
 
 code {
-    font-family: "LiberationMono";
+    font-family: "Iosevka";
 }
 
 a {
     color: var(--lavender);
 }
 
-body {
-    margin: 0px;
-}
-
-.header {
+page-header {
     padding-left: 8px;
     padding-right: 8px;
     display: flex;
     position: sticky;
     top: 0;
     margin: 0px;
-    background-color: var(--crust);
+    background-color: var(--mantle);
+    box-shadow: 0px 0px 8px var(--crust);
+}
+
+page-footer {
+    background-color: var(--mantle);
 }
 
 gap {
     flex: 1 1 auto;
+}
+
+.shiki {
+    margin: 0px;
+    padding: 12px;
+    box-shadow: 0px 5px 5px color-mix(in srgb, var(--mantle) 70%, #7f000000);
+    border-radius: 4px;
+}
+
+.link-container {
+    flex: 1 1 auto;
+    display: grid;
+    grid-template-rows: repeat(2, 1fr);
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
 }
 
 .links {
@@ -53,11 +83,22 @@ gap {
 }
 
 .links > a {
-    font-family: "LiberationSerif";
     font-size: 150%;
 }
 
 .project-link {
-    display: flex;
-    align-items: center;
+    align-content: center;
+    text-align: center;
+    filter: drop-shadow(0px 0px 0px var(--text));
+    text-decoration: none;
+    font-family: "Iosevka";
+    transition: transform 0.5s cubic-bezier(0,0,.2,1), font-size 0.5s cubic-bezier(0,0,.2,1);
+    font-style: italic;
+}
+
+.project-link:hover {
+    transform: translateY(-2px);
+    font-size: 120%;
+    font-style: normal;
+    font-weight: bold;
 }

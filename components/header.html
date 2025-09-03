@@ -1,0 +1,14 @@
+<h1>
+    fishnpotatoes' website
+</h1>
+<div class='links'>
+
+    <div class='link-container'>
+        <a class='project-link' href='/'>home</button></a>
+        <?kt
+            (projects as List<String>).joinToString("") { project ->
+                "<a class='project-link' href='/projects/$project.html'>${project.replace("-", " ")}</button></a>"
+            }
+        ?>
+    </div>
+</div>

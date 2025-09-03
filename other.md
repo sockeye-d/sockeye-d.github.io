@@ -1,10 +1,8 @@
----
-meta: {
-    title: "other"
-    description: "a really long description"
-}
----
-
+```yaml
+meta:
+  title: "other"
+  description: "a really long description"
+```
 # coho
 
 aaahjgkehjkgehjkgjhke
