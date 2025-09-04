@@ -7,20 +7,20 @@ class PageFooter extends HTMLElement {
         this.innerHTML = `<footer>
     <span class='footer-text'>
         Built with <a href='https://github.com/sockeye-d/coho'>coho</a> from <span class='tooltipped'
-            title='76419461d3a64fa96fbd983613a83557979e497d
+            title='a451bd156a9bd96ce4a6fbfe4586ff5eb194c575
 '>
-            7641946
+            a451bd1
 
         </span>
     </span>
     <div class="socials">
         <a href="https://github.com/sockeye-d">
-            <svg class="icon-small">
+            <svg class="icon-medium">
                 <use href="/tabler.svg#tabler-brand-github" />
             </svg>
         </a>
         <a href="https://bsky.app/profile/fishies.dev">
-            <svg class="icon-small">
+            <svg class="icon-medium">
                 <use href="/tabler.svg#tabler-brand-bluesky" />
             </svg>
         </a>

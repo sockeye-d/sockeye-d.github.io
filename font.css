@@ -55,57 +55,29 @@
 }
 
 @font-face {
-    font-family: "LiberationMono";
-    src: url("/fonts/LiberationMono-Regular.ttf");
-    font-weight: 400;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: "LiberationMono";
-    src: url("/fonts/LiberationMono-Italic.ttf");
-    font-weight: 400;
-    font-style: italic;
-}
-
-@font-face {
-    font-family: "LiberationMono";
-    src: url("/fonts/LiberationMono-Bold.ttf");
-    font-weight: bold;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: "LiberationMono";
-    src: url("/fonts/LiberationMono-BoldItalic.ttf");
-    font-weight: bold;
-    font-style: italic;
-}
-
-@font-face {
     font-family: "Iosevka";
-    src: url("fonts/IosevkaTermNerdFont_Regular.ttf");
+    src: url("fonts/IosevkaWeb-Regular.woff2");
     font-weight: 400;
     font-style: normal;
 }
 
 @font-face {
     font-family: "IosevkaBold";
-    src: url("fonts/IosevkaTermNerdFont_Bold.ttf");
+    src: url("fonts/IosevkaWeb-Bold.woff2");
     font-weight: bold;
     font-style: normal;
 }
 
 @font-face {
     font-family: "Iosevka";
-    src: url("fonts/IosevkaTermNerdFont_Italic.ttf");
+    src: url("fonts/IosevkaWeb-Italic.woff2");
     font-weight: 400;
     font-style: italic;
 }
 
 @font-face {
     font-family: "IosevkaBold";
-    src: url("fonts/IosevkaTermNerdFont_BoldItalic.ttf");
+    src: url("fonts/IosevkaWeb-BoldItalic.woff2");
     font-weight: bold;
     font-style: italic;
 }
