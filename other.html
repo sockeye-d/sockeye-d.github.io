@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<link rel='stylesheet' href='/style.css'>
+<page-header></page-header>
+<content>
+    <body><h1>coho</h1><p>aaahjgkehjkgehjkgjhke</p><p>😂</p><p>Hallucinated API:</p><pre><code class="language-kt">
+val source = FileSource(&quot;/path/to/source&quot;)
+
+root {
+    page(&quot;a&quot;) {
+        markdown(source.file(&quot;file.md&quot;))
+        html(source.file(&quot;html-file.html&quot;))
+    }
+}
+
+// results in this file tree
+// build/
+// build/a/file.html
+// build/a/html-file.html
+</code></pre></body>
+</content>
+<page-footer></page-footer>
+<script src='/highlight.js' type='module'></script>
+<script src="/components/header.js" type="text/javascript" defer></script>
+<script src="/components/footer.js" type="text/javascript" defer></script>
+
+</html>

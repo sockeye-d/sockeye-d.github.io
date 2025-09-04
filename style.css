@@ -1,0 +1,153 @@
+@import "font.css";
+@import "color.css";
+
+h1 {
+    font-family: "LiberationSerif";
+    font-weight: bold;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+body {
+    background-color: var(--mantle);
+    color: var(--text);
+    font-family: "LiberationSans";
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    min-height: 100vh;
+}
+
+content {
+    padding: 8px;
+    background-color: var(--base);
+    border-radius: 8px;
+    flex: 1 1 auto;
+}
+
+code {
+    font-family: "Iosevka";
+}
+
+a {
+    color: var(--lavender);
+}
+
+page-header {
+    padding-left: 8px;
+    padding-right: 8px;
+    display: flex;
+    position: sticky;
+    top: 0;
+    margin: 0px;
+    background-color: var(--mantle);
+    box-shadow: 0px 0px 8px var(--crust);
+}
+
+page-footer {
+    background-color: var(--mantle);
+}
+
+gap {
+    flex: 1 1 auto;
+}
+
+footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+}
+
+.shiki {
+    margin: 0px;
+    padding: 12px;
+    box-shadow: 0px 5px 5px color-mix(in srgb, var(--mantle) 70%, #7f000000);
+    border-radius: 4px;
+}
+
+.link-container {
+    flex: 1 1 auto;
+    display: grid;
+    grid-template-rows: repeat(2, 1fr);
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+}
+
+.links {
+    display: flex;
+    flex: 1 1 auto;
+}
+
+.links:nth-child(0) {
+    flex: 1 1 auto;
+}
+
+.links > * {
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+.links > a {
+    font-size: 150%;
+}
+
+.project-link {
+    align-content: center;
+    text-align: center;
+    filter: drop-shadow(0px 0px 0px var(--text));
+    text-decoration: none;
+    font-family: "Iosevka";
+    transition: transform 0.5s cubic-bezier(0,0,.2,1), font-size 0.5s cubic-bezier(0,0,.2,1);
+    font-style: italic;
+}
+
+.project-link:hover {
+    transform: translateY(-2px);
+    font-size: 120%;
+    font-style: normal;
+    font-weight: bold;
+}
+
+.footer-text {
+    text-align: center;
+}
+
+.icon {
+    width: 32px;
+    height: 32px;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+}
+
+.icon-small {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+}
+
+.icon-medium {
+    width: 24px;
+    height: 24px;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+}
+
+.socials > a {
+    padding: 2px;
+}
+
+a:has(svg) {
+    text-decoration: none;
+}
