@@ -5,31 +5,49 @@
     --h1-font-size: 2rem;
     --h2-font-size: 1.5rem;
     --h3-font-size: 1rem;
-    --font-size: 32px;
+    --font-size: 16px;
 }
 
 :root {
     --slow-animation: 0.5s cubic-bezier(0, 0, .2, 1);
+    --fast-animation: 0.2s cubic-bezier(0, 0, .2, 1);
 }
 
-page-header {
+page-header > .main-header {
+    flex-direction: row;
+}
+
+.links {
     flex-direction: column;
 }
 
-@media (width >= 35rem) {
-    :root {
-        --font-size: 24px;
-    }
-    page-header {
-        flex-direction: column;
-    }
+.link-popup {
+    flex: 1 1 auto;
+    display: grid;
+    grid-template-rows: repeat(2, 1fr);
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
 }
 
-@media (width >= 40rem) {
-    :root {
-        --font-size: 16px;
+.link-container {
+    display: none;
+}
+
+.link-menu {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+}
+
+@media (width >=40rem) {
+    .link-container {
+        display: grid;
     }
-    page-header {
+    .link-menu {
+        display: none;
+    }
+    page-header > .main-header {
         flex-direction: row;
     }
 }
@@ -74,6 +92,10 @@ content {
     flex: 1 1 auto;
 }
 
+pre.shiki {
+    white-space: pre-wrap;
+}
+
 code {
     font-family: "Iosevka";
 }
@@ -92,15 +114,47 @@ a:visited {
     color: var(--lavender);
 }
 
-page-header {
+page-header > .main-header {
     padding-left: 0.5rem;
     padding-right: 0.5rem;
     display: flex;
+    background-color: var(--mantle);
+}
+
+page-header > .link-popup {
+    display: grid;
+    margin-top: -40px;
+    z-index: -1;
+    transition: margin-top var(--fast-animation);
+}
+
+page-header > .link-popup.open {
+    margin-top: 0;
+    display: grid;
+}
+
+page-header {
+    display: flex;
+    flex-direction: column;
     position: sticky;
     top: 0;
     margin: 0px;
     background-color: var(--mantle);
     box-shadow: 0px 0px 0.5rem var(--crust);
+}
+
+page-header:has(.link-popup) > .main-header > .links > .link-menu > svg {
+    rotate: 0deg;
+    transition: rotate var(--fast-animation), color var(--fast-animation);
+}
+
+page-header:has(.link-popup.open) > .main-header > .links > .link-menu > svg {
+    rotate: 90deg;
+    color: var(--text);
+}
+
+.link-menu {
+    cursor: pointer;
 }
 
 page-footer {
@@ -133,7 +187,6 @@ footer>* {
 
 .link-container {
     flex: 1 1 auto;
-    display: grid;
     grid-template-rows: repeat(2, 1fr);
     grid-auto-flow: column;
     grid-auto-columns: 1fr;
@@ -141,6 +194,7 @@ footer>* {
 
 .links {
     display: flex;
+    flex-direction: column;
     flex: 1 1 auto;
 }
 
@@ -211,4 +265,8 @@ footer>* {
 
 a:hover:has(svg) {
     text-decoration: none;
+}
+
+#themeToggle {
+    cursor: pointer;
 }

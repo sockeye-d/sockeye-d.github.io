@@ -24,6 +24,8 @@ class PageFooter extends HTMLElement {
                 <use href="/tabler.svg#tabler-brand-bluesky" />
             </svg>
         </a>
+        <a id="themeToggle" onclick="toggleTheme()">
+        </a>
     </div>
 </footer>
 `
