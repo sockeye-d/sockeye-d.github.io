@@ -28,4 +28,6 @@ root {
     path("fonts") {
         source.files().forEach { cp(src(it.name)) }
     }
+    dl("https://unpkg.com/feather-icons@4.29.2/dist/feather-sprite.svg", "feather.svg")
+    dl("https://cdn.jsdelivr.net/npm/@tabler/icons-sprite@latest/dist/tabler-sprite.svg", "tabler.svg")
 }

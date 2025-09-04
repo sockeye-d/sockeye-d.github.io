@@ -21,7 +21,6 @@ body {
 content {
     padding: 8px;
     background-color: var(--base);
-/*     min-height: calc(100vh - 52px - 51px - 16px); */
     border-radius: 8px;
     flex: 1 1 auto;
 }
@@ -51,6 +50,14 @@ page-footer {
 
 gap {
     flex: 1 1 auto;
+}
+
+footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
 }
 
 .shiki {
@@ -101,4 +108,46 @@ gap {
     font-size: 120%;
     font-style: normal;
     font-weight: bold;
+}
+
+.footer-text {
+    text-align: center;
+}
+
+.icon {
+    width: 32px;
+    height: 32px;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+}
+
+.icon-small {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+}
+
+.icon-medium {
+    width: 24px;
+    height: 24px;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+}
+
+.socials > a {
+    padding: 2px;
+}
+
+a:has(svg) {
+    text-decoration: none;
 }
