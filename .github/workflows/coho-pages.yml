@@ -1,0 +1,44 @@
+name: Build coho page
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: "temurin"
+          server-id: github
+          settings-path: ${{ github.workspace }}
+      - name: Download workflow artifact
+        uses: dawidd6/action-download-artifact@v11
+        with:
+          github_token: ${{secrets.ARTIFACT_TOKEN}}
+          workflow_conclusion: success
+          name: coho.jar
+          repo: sockeye-d/coho
+      - run: java -jar coho.jar
+      - name: Upload static files as artifact
+        id: deployment
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: build/
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v4
+
