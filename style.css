@@ -96,6 +96,7 @@ content {
 
 pre.codeblock {
     white-space: pre-wrap;
+    overflow-wrap: break-word;
     background-color: var(--mantle);
     margin: 1rem;
     margin-left: 0;
