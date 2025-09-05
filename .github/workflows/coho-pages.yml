@@ -6,12 +6,13 @@ jobs:
     permissions:
       contents: read
     steps:
-      - name: Install nushell
+      - name: Install required packages
         run: |
           curl -fsSL https://apt.fury.io/nushell/gpg.key | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/fury-nushell.gpg
           echo "deb https://apt.fury.io/nushell/ /" | sudo tee /etc/apt/sources.list.d/fury.list
           sudo apt update
           sudo apt install nushell
+          sudo apt install imagemagick
       - uses: actions/checkout@v4
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
@@ -46,6 +47,6 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Upload GitHub Pages artifact
-        uses: actions/upload-pages-artifact@v4
-
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
