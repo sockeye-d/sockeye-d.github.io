@@ -12,7 +12,10 @@ jobs:
           echo "deb https://apt.fury.io/nushell/ /" | sudo tee /etc/apt/sources.list.d/fury.list
           sudo apt update
           sudo apt install nushell
-          sudo apt install imagemagick
+
+          curl -fsSL https://imagemagick.org/archive/binaries/magick
+          chmod +x magick
+          mv magick /usr/bin
       - uses: actions/checkout@v4
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
