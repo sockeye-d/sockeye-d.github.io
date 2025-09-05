@@ -1,5 +1,15 @@
 root {
-    markdownTemplate = { ktHtmlTemplate(src("markdown-template.html"))(it) }
+    markdownTemplate = {
+        val meta = frontmatter["meta"]?.asMap()
+        val title: String? = meta?.get("title") as? String
+        val description: String? = meta?.get("description") as? String
+        val type: String? = meta?.get("type") as? String
+
+        ktHtmlTemplate(
+            src("markdown-template.html"),
+            context = mapOf("title" to title, "description" to description, "type" to type),
+        )(it)
+    }
 
     KtHTMLFile.globalContext = mapOf(
         "projects" to source.cd("projects").files("*.md").map { it.nameWithoutExtension },
@@ -10,7 +20,7 @@ root {
 
     md(src("other.md"))
     ktHtml(src("index.html"))
-    cp(src("highlight.js"))
+    cp(src("main.js"))
     cp(src("style.css"))
     cp(src("font.css"))
     cp(src("color.css"))
@@ -28,6 +38,10 @@ root {
     path("fonts") {
         source.files().forEach { cp(src(it.name)) }
     }
-    dl("https://unpkg.com/feather-icons@4.29.2/dist/feather-sprite.svg", "feather.svg")
+
+    // icons
     dl("https://cdn.jsdelivr.net/npm/@tabler/icons-sprite@latest/dist/tabler-sprite.svg", "tabler.svg")
+
+    // required for github for some reason
+    text("fishies.dev", "CNAME")
 }

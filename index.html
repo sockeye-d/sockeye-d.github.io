@@ -7,14 +7,15 @@
     <meta property='og:title' content='kotlin template test'>
     <meta property='og:description' content='a really long description'>
     <meta property='og:type' content='website'>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
 </head>
 
 <body>
     <page-header></page-header>
     <content>
-        <ul>
-            <?kt (0..25).joinToString("") { num -> "<li><a href='javascript:alert($num)'>$num</a></li>" } ?>
-        </ul>
+        <p>
+            I'm fishnpotatoes!
+        </p>
     </content>
     <page-footer></page-footer>
 </body>
@@ -22,5 +23,6 @@
 <link rel='icon' href='/favicon.ico'>
 <script src="components/header.js" defer></script>
 <script src="components/footer.js" defer></script>
+<script src="/main.js"></script>
 
 </html>

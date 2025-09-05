@@ -12,7 +12,6 @@ aaahjgkehjkgehjkgjhke
 Hallucinated API:
 
 ```kt
-
 val source = FileSource("/path/to/source")
 
 root {
