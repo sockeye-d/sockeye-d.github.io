@@ -63,3 +63,5 @@ function popupMenu() {
     else
         linkPopup.classList.add("open");
 }
+
+loadTheme();
