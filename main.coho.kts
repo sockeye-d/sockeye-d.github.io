@@ -25,8 +25,8 @@ root {
     cp(src("font.css"))
     cp(src("color.css"))
     cp(src("favicon.png"))
-    shell("nu", "-c",
-          "magick convert -background transparent favicon.png -define icon:auto-resize=512,16,32 favicon.ico"
+    shell(
+          "magick", "convert", "-background", "transparent", "favicon.png", "-define", "icon:auto-resize=512,16,32", "favicon.ico",
     )
     path("projects") {
         source.files("*.md").forEach { md(src(it.name)) }
