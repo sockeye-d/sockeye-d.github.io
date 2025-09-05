@@ -15,7 +15,7 @@ jobs:
 
           curl -fsSL https://imagemagick.org/archive/binaries/magick -o magick
           chmod +x magick
-          mv magick /usr/bin
+          sudo mv magick /usr/bin
       - uses: actions/checkout@v4
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
