@@ -1,0 +1,28 @@
+<div class="main-header">
+    <a href="/">
+        <h1>
+            fishies.dev
+        </h1>
+    </a>
+    <div class='links'>
+        <a onclick="popupMenu()" class="link-menu">
+            <svg class="icon-medium">
+                <use href="/tabler.svg#tabler-menu-2" />
+            </svg>
+        </a>
+        <div class='link-container'>
+            <?kt
+            (projects as List<String>).joinToString("") { project ->
+                "<a class='project-link' href='/projects/$project.html'>${project.replace("-", " ")}</button></a>"
+            }
+        ?>
+        </div>
+    </div>
+</div>
+<div id="linkPopup" class="link-popup">
+    <?kt
+    (projects as List<String>).joinToString("") { project ->
+        "<a class='project-link' href='/projects/$project.html'>${project.replace("-", " ")}</button></a>"
+    }
+?>
+</div>
