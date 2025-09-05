@@ -23,6 +23,7 @@ jobs:
           workflow_conclusion: success
           name: coho.jar
           repo: sockeye-d/coho
+          workflow: gradle-artifact.yml
       - run: java -jar coho.jar
       - name: Upload static files as artifact
         id: deployment
