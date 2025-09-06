@@ -363,3 +363,24 @@ code > span {
 .code-prolog {
     color: var(--yellow);
 }
+
+.code-rule {
+    color: var(--red);
+    font-style: italic;
+}
+
+.code-selector {
+    color: var(--teal);
+}
+
+.code-property {
+    color: var(--blue);
+}
+
+.code-identifier {
+    color: var(--text);
+}
+
+.code-module {
+    color: var(--green);
+}
