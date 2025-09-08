@@ -5,7 +5,7 @@ class PageFooter extends HTMLElement {
 
     connectedCallback() {
         this.innerHTML = `<?kt
-        import dev.fishies.coho.core.html.* ktTemplate(root.src("components/footer.html"))
+        import dev.fishies.coho.html.* ktTemplate(root.src("components/footer.html"))
         ?>`
     }
 }

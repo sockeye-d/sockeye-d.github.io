@@ -382,5 +382,13 @@ code > span {
 }
 
 .code-module {
+    color: var(--teal);
+}
+
+.code-constant {
+    color: var(--peach);
+}
+
+.code-url {
     color: var(--green);
 }

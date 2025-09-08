@@ -5,7 +5,7 @@ class PageHeader extends HTMLElement {
 
     connectedCallback() {
         this.innerHTML = `<?kt
-        import dev.fishies.coho.core.html.* ktTemplate(root.src("components/header.html"))
+        import dev.fishies.coho.html.* ktTemplate(root.src("components/header.html"))
         ?>`
     }
 }
