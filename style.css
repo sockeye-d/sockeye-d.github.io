@@ -102,8 +102,15 @@ pre.codeblock {
     margin-left: 0;
     margin-right: 0;
     padding: 0.8rem;
-    box-shadow: 0px 0.3rem 0.3rem color-mix(in srgb, var(--mantle) 70%, #7f000000);
+    box-shadow: 0px 0.2rem 0.3rem color-mix(in srgb, var(--mantle) 70%, #7f000000);
     border-radius: 4px;
+}
+
+span.inline-code {
+    background-color: var(--mantle);
+    border-radius: 4px;
+    padding: 0.2rem;
+    box-shadow: 0px 0.2rem 0.3rem color-mix(in srgb, var(--mantle) 70%, #7f000000);
 }
 
 code {
@@ -390,5 +397,15 @@ code > span {
 }
 
 .code-url {
-    color: var(--green);
+    color: var(--lavender);
+    font-style: italic;
+}
+
+.code-variable {
+    color: var(--pink);
+}
+
+.code-argument {
+    color: var(--maroon);
+    font-style: italic;
 }

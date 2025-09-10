@@ -5,7 +5,7 @@ root {
         val description: String? = meta?.get("description") as? String
         val type: String? = meta?.get("type") as? String
 
-        ktHtmlTemplate(
+        ktMdTemplate(
             src("markdown-template.html"),
             context = mapOf("title" to title, "description" to description, "type" to type),
         )(it)
@@ -29,7 +29,8 @@ root {
           "magick", "convert", "-background", "transparent", "favicon.png", "-define", "icon:auto-resize=512,16,32", "favicon.ico",
     )
     path("projects") {
-        source.files("*.md").forEach { md(src(it.name)) }
+        // source.files("*.md").forEach { md(src(it.name)) }
+        md(src("coho.md"))
     }
     path("components") {
         ktHtml(src("header.js"))
