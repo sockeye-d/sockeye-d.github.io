@@ -11,7 +11,7 @@ root {
         )(it)
     }
 
-    KtHTMLFile.globalContext = mapOf(
+    KtHtmlFile.globalContext = mapOf(
         "projects" to source.cd("projects").files("*.md").map { it.nameWithoutExtension },
         "gitHash" to exec("git", "rev-parse", "--short", "HEAD"),
         "longGitHash" to exec("git", "rev-parse", "HEAD"),
