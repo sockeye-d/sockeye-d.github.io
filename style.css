@@ -106,6 +106,14 @@ pre.codeblock {
     border-radius: 4px;
 }
 
+blockquote {
+    padding-left: 0.5rem;
+    margin-left: 0rem;
+    color: var(--subtext0);
+    border-left: 2px solid var(--overlay2);
+    border-radius: 2px;
+}
+
 span.inline-code {
     background-color: var(--mantle);
     border-radius: 4px;
