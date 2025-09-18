@@ -293,6 +293,18 @@ code > span {
     color: #ff00ff;
 }
 
+/*pre.codeblock code {
+    counter-reset: line-number;
+}
+
+pre.codeblock code span.code-line {
+    counter-increment: line-number;
+}
+
+pre.codeblock code span.code-line::before {
+    content: counter(line-number)
+}*/
+
 .code-keyword {
     color: var(--mauve);
 }
