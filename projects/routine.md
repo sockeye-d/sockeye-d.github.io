@@ -40,7 +40,7 @@ class Drivetrain(map: HardwareMapEx) : Subsystem() {
     fun drive(translationPower: Vector2, headingPower: Radians) = drive(Pose2(translationPower, headingPower))
 }
 ```
-> (11 lines)
+> (30 lines)
 
 Equivalent Java code:
 
@@ -113,28 +113,20 @@ public class MecanumDriveSubsystem extends SubsystemBase {
      * @param heading in degrees
      */
     public void driveFieldCentric(double x, double y, double rx, double heading) {
-
         rx = -rx;
-
+        
         double headingRads = -Math.toRadians(heading);
-
         double rotX = y * Math.cos(headingRads) + x * Math.sin(headingRads);
-
         double rotY = y * Math.sin(headingRads) - x * Math.cos(headingRads);
 
-        double frontLeftPower = rotY + rotX + rx;
-        double backLeftPower = rotY - rotX + rx;
-        double frontRightPower = rotY - rotX - rx;
-        double backRightPower = rotY + rotX - rx;
-
-        fl.setPower(frontLeftPower);
-        bl.setPower(backLeftPower);
-        fr.setPower(frontRightPower);
-        br.setPower(backRightPower);
+        fl.setPower(rotY + rotX + rx);
+        bl.setPower(rotY - rotX + rx);
+        fr.setPower(rotY - rotX - rx);
+        br.setPower(rotY + rotX - rx);
     }
 }
 ```
-> (39 lines)
+> (80 lines)
 
 ## Binding reset yaw button
 
