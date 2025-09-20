@@ -14,9 +14,7 @@
 <page-header></page-header>
 <content>
     <div class="tag-container">
-        <?kt @file:Import tags.joinToString("") {
-            generateTagHtml(it as String)
-        } ?>
+        <?kt @file:Import tags.joinToString("", transform = ::tagHtml) ?>
     </div>
     <?kt content ?>
 </content>

@@ -99,6 +99,7 @@ root {
                 allPosts.sortedBy { it.pubDate }.reversed().map { it.toMap() + mapOf("html" to innerHtmls[it.title]) }
             emptyList()
         }
+        cp(src("index.js"))
         ktHtml(src("index.html"), context)
     }
 

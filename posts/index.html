@@ -15,14 +15,31 @@
     <content>
         <h1> Blog posts </h1>
         <div class="tag-container">
-            <?kt@file:Import; allTags.joinToString("") { generateTagHtml(it as String) } ?>
+            <?kt@file:Import; allTags.joinToString("", transform = ::clickableTag) ?>
         </div>
-        <?kt@file:Import; (posts as List<Map<String?, Any? >>).joinToString("") {
-            """<div class="post-container"><div class="tag-container">${
-                (it["tags"] as List<*>).mapNotNull { it as? String }.joinToString("") {
-                    generateTagHtml(it)
+        <?kt@file:Import; (posts as List<Map<String?, Any? >>)
+            .joinToString("") {
+                val tags = (it["tags"] as List<*>).joinToString(" ") { "post-tag-$it" }
+                tag("div", "class" to "post-container ${tags}") {
+                    val source = (it["source"] as Path).nameWithoutExtension
+                    tag("a", "href" to "/posts/$source.html") {
+                        tag("h2") {
+                            append(it["title"])
+                        }
+                    }
+                    tag("p") {
+                        append(it["description"])
+                    }
+                    tag("p", "class" to "subtext") {
+                        append("Published ")
+                        append(it["pubDate"].formatDateTime())
+                    }
+                    tag("div", "class" to "tag-container") {
+                        append((it["tags"] as List<*>)
+                            .joinToString("", transform = ::clickableTag)
+                        )
+                    }
                 }
-            }</div><a href="/posts/${(it["source"] as Path).nameWithoutExtension}.html"><h2>${it["title"]}</h2></a><p>${it["description"]}</p><p class="subtext">Published ${it["pubDate"]}</p></div>"""
             }?>
     </content>
     <page-footer></page-footer>
@@ -32,5 +49,6 @@
 <script src="components/header.js" defer></script>
 <script src="components/footer.js" defer></script>
 <script src="/main.js"></script>
+<script src="/posts/index.js"></script>
 
 </html>

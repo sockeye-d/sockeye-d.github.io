@@ -309,18 +309,6 @@ code > span {
     color: #ff00ff;
 }
 
-/*pre.codeblock code {
-    counter-reset: line-number;
-}
-
-pre.codeblock code span.code-line {
-    counter-increment: line-number;
-}
-
-pre.codeblock code span.code-line::before {
-    content: counter(line-number)
-}*/
-
 .tag-container:not(:has(:nth-child(1))) {
     display: none;
 }
@@ -339,10 +327,16 @@ pre.codeblock code span.code-line::before {
     border: 0;
     padding: 0.25rem;
     border-radius: 0.25rem;
+
+    transition: background-color var(--fast-animation);
 }
 
 .tag-container a svg {
     margin-right: 0.25rem;
+}
+
+.post-container h2 {
+    margin-top: 0;
 }
 
 .code-keyword {
