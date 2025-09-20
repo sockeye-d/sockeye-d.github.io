@@ -1,7 +1,6 @@
 ```yaml
-meta:
-  title: coho
-  description: Static site generator written in Kotlin
+title: coho
+description: Static site generator written in Kotlin
 ```
 # coho
 

@@ -1,6 +1,5 @@
 ```yaml
-meta:
-  title: routine
+title: routine
 ```
 
 # routine

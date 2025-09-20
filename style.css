@@ -106,6 +106,18 @@ pre.codeblock {
     border-radius: 4px;
 }
 
+div.post-container {
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+    background-color: var(--mantle);
+    margin: 1rem;
+    margin-left: 0;
+    margin-right: 0;
+    padding: 0.8rem;
+    box-shadow: 0px 0.2rem 0.3rem color-mix(in srgb, var(--mantle) 70%, #7f000000);
+    border-radius: 4px;
+}
+
 blockquote {
     padding-left: 0.5rem;
     margin-left: 0rem;
@@ -289,6 +301,10 @@ a:hover:has(svg) {
     cursor: pointer;
 }
 
+.subtext {
+    color: var(--subtext0);
+}
+
 code > span {
     color: #ff00ff;
 }
@@ -304,6 +320,30 @@ pre.codeblock code span.code-line {
 pre.codeblock code span.code-line::before {
     content: counter(line-number)
 }*/
+
+.tag-container:not(:has(:nth-child(1))) {
+    display: none;
+}
+
+.tag-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.5rem;
+}
+
+.tag-container a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--surface0);
+    border: 0;
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+}
+
+.tag-container a svg {
+    margin-right: 0.25rem;
+}
 
 .code-keyword {
     color: var(--mauve);

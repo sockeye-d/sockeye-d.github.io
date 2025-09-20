@@ -11,9 +11,10 @@
             </svg>
         </a>
         <div class='link-container'>
+            <a class='project-link' href='/posts'>posts</a>
             <?kt
-            (projects as List<String>).joinToString("") { project ->
-                "<a class='project-link' href='/projects/$project.html'>${project.replace("-", " ")}</button></a>"
+            projects.joinToString("") { project ->
+                "<a class='project-link' href='/projects/$project.html'>${(project as String).replace("-", " ")}</a>"
             }
         ?>
         </div>
@@ -21,8 +22,8 @@
 </div>
 <div id="linkPopup" class="link-popup">
     <?kt
-    (projects as List<String>).joinToString("") { project ->
-        "<a class='project-link' href='/projects/$project.html'>${project.replace("-", " ")}</button></a>"
+    projects.joinToString("") { project ->
+        "<a class='project-link' href='/projects/$project.html'>${(project as String).replace("-", " ")}</a>"
     }
 ?>
 </div>

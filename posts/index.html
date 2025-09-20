@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset='UTF-8'>
+    <title>kotlin template test</title>
+    <meta property='og:title' content='kotlin template test'>
+    <meta property='og:description' content='a really long description'>
+    <meta property='og:type' content='website'>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+</head>
+
+<body>
+    <page-header></page-header>
+    <content>
+        <h1> Blog posts </h1>
+        <div class="tag-container">
+            <?kt@file:Import; allTags.joinToString("") { generateTagHtml(it as String) } ?>
+        </div>
+        <?kt@file:Import; (posts as List<Map<String?, Any? >>).joinToString("") {
+            """<div class="post-container"><div class="tag-container">${
+                (it["tags"] as List<*>).mapNotNull { it as? String }.joinToString("") {
+                    generateTagHtml(it)
+                }
+            }</div><a href="/posts/${(it["source"] as Path).nameWithoutExtension}.html"><h2>${it["title"]}</h2></a><p>${it["description"]}</p><p class="subtext">Published ${it["pubDate"]}</p></div>"""
+            }?>
+    </content>
+    <page-footer></page-footer>
+</body>
+<link rel='stylesheet' href='/style.css'>
+<link rel='icon' href='/favicon.ico'>
+<script src="components/header.js" defer></script>
+<script src="components/footer.js" defer></script>
+<script src="/main.js"></script>
+
+</html>
