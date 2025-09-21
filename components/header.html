@@ -22,6 +22,7 @@
     </div>
 </div>
 <div id="linkPopup" class="link-popup">
+    <a class='project-link' href='/posts'>posts</a>
     <?kt
     projects.joinToString("") { project ->
         "<a class='project-link' href='/projects/$project.html'>${(project as String).replace("-", " ")}</a>"

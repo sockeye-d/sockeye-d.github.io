@@ -1,4 +1,5 @@
 import java.time.LocalDateTime
+import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 data class Post(
@@ -35,6 +36,7 @@ data class Post(
 root {
     val allPosts = source.cd("posts").files("*.md")
         .map { Post.fromFrontmatter(it, parseMarkdownFrontmatter(it.readText()).first ?: emptyMap()) }
+        .sortedBy { it.pubDate }.reversed()
     val allTags = allPosts.flatMap { it.tags as? List<*> ?: emptyList() }.distinct()
 
     markdownTemplate = {
@@ -100,7 +102,34 @@ root {
         val context = mutableMapOf<String, Any?>()
         run { // populate the posts at build time
             context["posts"] =
-                allPosts.sortedBy { it.pubDate }.reversed().map { it.toMap() + mapOf("html" to innerHtmls[it.title]) }
+                allPosts.map { it.toMap() + mapOf("html" to innerHtmls[it.title]) }
+            val rss = tag("rss", "version" to "2.0") {
+                tag("channel") {
+                    tag("title") { append("fishnpotatoes' blog") }
+                    tag("link") { append("https://fishies.dev/posts") }
+                    tag("description") { append("fishnpotatoes' blog") }
+                    tag("language") { append("en") }
+                    tag("ttl") { append(15) }
+
+                    for (post in allPosts) {
+                        tag("item") {
+                            tag("title") { append(post.title) }
+                            tag("description") {
+                                cdata {
+                                    append(innerHtmls[post.title])
+                                }
+                            }
+                            tag("link") { append("https://fishies.dev/posts/${post.source.nameWithoutExtension}.html") }
+                            tag("pubDate") {
+                                append(
+                                    post.pubDate.atOffset(ZoneOffset.UTC).format(DateTimeFormatter.RFC_1123_DATE_TIME)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+            build("../rss.xml").writeText(rss)
             emptyList()
         }
         cp(src("index.js"))
