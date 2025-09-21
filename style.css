@@ -106,7 +106,7 @@ pre.codeblock {
     border-radius: 4px;
 }
 
-div.post-container {
+.card {
     white-space: pre-wrap;
     overflow-wrap: break-word;
     background-color: var(--mantle);
@@ -327,15 +327,16 @@ code > span {
     border: 0;
     padding: 0.25rem;
     border-radius: 0.25rem;
+    border: 0.125rem transparent solid;
 
-    transition: background-color var(--fast-animation);
+    transition: background-color var(--fast-animation), border var(--fast-animation);
 }
 
 .tag-container a svg {
     margin-right: 0.25rem;
 }
 
-.post-container h2 {
+.card h2 {
     margin-top: 0;
 }
 

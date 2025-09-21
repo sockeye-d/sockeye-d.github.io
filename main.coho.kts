@@ -53,6 +53,8 @@ root {
         "gitHash" to exec("git", "rev-parse", "--short", "HEAD"),
         "longGitHash" to exec("git", "rev-parse", "HEAD"),
         "allTags" to allTags,
+        "headerHtml" to ktTemplate(src("components/header.html")),
+        "footerHtml" to ktTemplate(src("components/footer.html")),
         "root" to this,
     )
 

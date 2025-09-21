@@ -11,7 +11,7 @@
 </head>
 
 <body>
-    <page-header></page-header>
+    <?kt headerHtml ?>
     <content>
         <h1> Blog posts </h1>
         <div class="tag-container">
@@ -20,7 +20,7 @@
         <?kt@file:Import; (posts as List<Map<String?, Any? >>)
             .joinToString("") {
                 val tags = (it["tags"] as List<*>).joinToString(" ") { "post-tag-$it" }
-                tag("div", "class" to "post-container ${tags}") {
+                tag("div", "class" to "card post-container ${tags}") {
                     val source = (it["source"] as Path).nameWithoutExtension
                     tag("a", "href" to "/posts/$source.html") {
                         tag("h2") {
@@ -42,12 +42,10 @@
                 }
             }?>
     </content>
-    <page-footer></page-footer>
+    <?kt footerHtml ?>
 </body>
 <link rel='stylesheet' href='/style.css'>
 <link rel='icon' href='/favicon.ico'>
-<script src="/components/header.js" defer></script>
-<script src="/components/footer.js" defer></script>
 <script src="/main.js"></script>
 <script src="/posts/index.js"></script>
 
