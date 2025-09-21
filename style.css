@@ -2,10 +2,12 @@
 @import "color.css";
 
 :root {
-    --h1-font-size: 2rem;
-    --h2-font-size: 1.5rem;
-    --h3-font-size: 1rem;
-    --font-size: 16px;
+    --h1-font-size: 32px;
+    --h2-font-size: 24px;
+    --h3-font-size: 18px;
+    --font-size: 18px;
+
+    line-height: 1.75rem;
 }
 
 :root {
@@ -160,7 +162,7 @@ page-header>.main-header {
 
 page-header>.link-popup {
     display: grid;
-    margin-top: -40px;
+    margin-top: -63px;
     z-index: -1;
     transition: margin-top var(--fast-animation);
 }

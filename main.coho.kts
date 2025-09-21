@@ -48,15 +48,17 @@ root {
         )(it)
     }
 
-    KtHtmlFile.globalContext = mapOf(
+    var globalContext = mutableMapOf<String, Any?>(
         "projects" to source.cd("projects").files("*.md").map { it.nameWithoutExtension },
         "gitHash" to exec("git", "rev-parse", "--short", "HEAD"),
         "longGitHash" to exec("git", "rev-parse", "HEAD"),
         "allTags" to allTags,
-        "headerHtml" to ktTemplate(src("components/header.html")),
-        "footerHtml" to ktTemplate(src("components/footer.html")),
         "root" to this,
     )
+    KtHtmlFile.globalContext = globalContext;
+    globalContext["headerHtml"] = ktTemplate(src("components/header.html"))
+    globalContext["footerHtml"] = ktTemplate(src("components/footer.html"))
+    KtHtmlFile.globalContext = globalContext;
 
     includes = listOf(src("util.coho.kts"))
 
