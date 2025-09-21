@@ -261,6 +261,6 @@ fun runLocalServer(buildPath: Path, reload: StateFlow<Int>, noReloadScript: Bool
 Coho may be the greatest thing I've ever made. I think it gives me the flexibility to write almost vanilla HTML/JS/CSS (which of course everything compiles down to anyway) while also having enough features to let me write this post in Markdown, have it get automatically converted to HTML with a fancy template, and be automatically syndicated through a statically hosted but dynamically generated (at build-time, that is) `rss.xml` feed.
 
 For a project that came to me randomly while I was driving to a robotics meeting (dangerous, I know), I'd say it's gone pretty well.
-
+As far as I know I'll be the only one using it, but it'd be pretty cool if you've got a static website you need making and decide to give it a spin.
 
 > The source for this website can be [found on GitHub](https://github.com/sockeye-d/sockeye-d.github.io) as an example of coho in action.
