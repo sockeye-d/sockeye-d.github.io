@@ -80,10 +80,12 @@ root {
     cp(src("index.css"))
     cp(src("font.css"))
     cp(src("color.css"))
+    if (src("favicon.ico").notExists())
+        exec(
+            "convert", "-background", "transparent", "favicon.svg", "-define", "icon:auto-resize=512,16,32", "favicon.ico",
+        )
     cp(src("favicon.svg"))
-    shell(
-        "convert", "-background", "transparent", "favicon.svg", "-define", "icon:auto-resize=512,16,32", "favicon.ico",
-    )
+    cp(src("favicon.ico"))
     path("projects") {
         source.files("*.md").forEach { md(src(it.name)) }
     }
