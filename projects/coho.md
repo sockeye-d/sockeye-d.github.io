@@ -1,48 +1,17 @@
 ```yaml
+priority: 1
 title: coho
 description: Static site generator written in Kotlin
+source: "https://github.com/sockeye-d/coho"
+long-description: >
+    Coho is a tool I refer to as "The Kotlin programmer's static website generator."
+    The entire thing is built around the Kotlin scripting engine using a custom Kotlin DSL as a build script.
+
+    This makes it significantly more flexible than existing solutions, since you basically get to build your own mini-framework on top of a coho.
 ```
-# coho
+Coho is a tool I refer to as "The Kotlin programmer's static website generator."
+The entire thing is built around the Kotlin scripting engine using a custom Kotlin DSL as a build script.
 
-Coho is a static site generator written in Kotlin. It supports
-* live reload
-* simple Kotlin-based configuration
+This makes it significantly more flexible than existing solutions, since you basically get to build your own mini-framework on top of a coho.
 
-[link](/projects/godl.md)
-
-```nu
-#! /usr/bin/nu
-
-let bad_chars = [
-    '"', '*', '/', ':', '<', '>', '?', '\', '|',
-]
-
-def scan-dir [base_dir: path = .] {
-    ls --full-paths $base_dir | par-each {|path|
-        if ($path.name | path type) == dir {
-            scan-dir $path.name
-        }
-
-        let filename: string = $path.name | path basename
-        if ($bad_chars | any {|test_char| $filename | str contains $test_char}) {
-            notify-send -a "check-filenames.nu" -i "syncthing" $"($filename) has bad characters" $"($path.name)" -t 10000
-        }
-    }
-}
-
-scan-dir ~/synced/
-null
-
-let closure = {|a, b: int, ...c|
-    print "hi"
-}
-
-if (git remote get-url origin | complete | get exit_code) == 0 {
-
-} else {
-
-}
-
-```
-
-Here is some inline highlighted code `#!nu ls -a` hahaha
+For more details about it, you can read my blog post [here](/posts/coho.html)

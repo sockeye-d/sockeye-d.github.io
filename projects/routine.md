@@ -1,10 +1,20 @@
 ```yaml
+priority: 2
 title: routine
+description: FTC command based V3 library for Kotlin
+source: "https://github.com/sockeye-d/routine"
+long-description: >
+    Routine is an FTC library I wrote.
+    It was designed as an implementation of <a href="https://www.chiefdelphi.com/t/500699">WPILib's V3 command library</a>, which uses techniques unsuitable for FTC due to requiring a modern (e.g., non-Android) JVM.
+    Since Kotlin implements its coroutine model <i>without</i> JVM green threads, instead opting for a state machine transformation in the compiler, it can run on an Android JVM, and is thus suitable for FTC use.
 ```
+Routine is an FTC library I wrote.
+It was designed as an implementation of [WPILib's V3 command library](https://www.chiefdelphi.com/t/500699), which uses techniques unsuitable for FTC due to requiring a modern (e.g., non-Android) JVM.
+Since Kotlin implements its coroutine model *without* JVM green threads, instead opting for a state machine transformation in the compiler, it can run on an Android JVM, and is thus suitable for FTC use.
 
-# routine
+Sadly, it never saw actual competition use since my teammates didn't believe it was worth it. That's okay since I still learned about how Kotlin coroutines work.
 
-Kotlin is easier to read and write, and often results in shorter code.
+Here are some snippets of equivalent Java and Kotlin code:
 
 ## Basic drivetrain movement
 

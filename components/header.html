@@ -1,32 +1,12 @@
 <page-header>
-<div class="main-header">
-    <a href="/">
+    <div class="main-header">
         <h1>
             fishies.dev
         </h1>
-    </a>
-    <div class='links'>
-        <a onclick="popupMenu()" class="link-menu">
-            <svg class="icon-medium">
-                <use href="/tabler.svg#tabler-menu-2" />
-            </svg>
-        </a>
-        <div class='link-container'>
-            <a class='project-link' href='/posts'>posts</a>
-            <?kt
-            projects.joinToString("") { project ->
-                "<a class='project-link' href='/projects/$project.html'>${(project as String).replace("-", " ")}</a>"
-            }
-        ?>
+        <div class="link-container">
+            <a class="project-link" href="/">home</a>
+            <a class="project-link" href="/posts">posts</a>
+            <a class="project-link" id="themeToggle" onclick="toggleTheme()"></a>
         </div>
     </div>
-</div>
-<div id="linkPopup" class="link-popup">
-    <a class='project-link' href='/posts'>posts</a>
-    <?kt
-    projects.joinToString("") { project ->
-        "<a class='project-link' href='/projects/$project.html'>${(project as String).replace("-", " ")}</a>"
-    }
-?>
-</div>
 </page-header>

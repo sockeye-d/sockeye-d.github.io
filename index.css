@@ -1,0 +1,47 @@
+@import "color.css";
+@import "style.css";
+
+.first-section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.first-section>* {
+    margin: 1rem;
+}
+
+.big-image {
+    width: 8rem;
+    height: 8rem;
+    filter: drop-shadow(0 0.2rem 0.3rem color-mix(in srgb, var(--crust) 70%, #7f000000));
+}
+
+@media(width <=600px) {
+    .big-image {
+        width: 6rem;
+        height: 6rem;
+    }
+}
+
+@media(width <=400px) {
+    .big-image {
+        width: 4rem;
+        height: 4rem;
+    }
+}
+
+.right {
+    text-align: center;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+    gap: 1rem;
+}
+
+.card-grid .card {
+    margin-top: 0;
+    margin-bottom: 0;
+}

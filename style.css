@@ -22,10 +22,6 @@ page-header>.main-header {
     flex-direction: row;
 }
 
-.links {
-    flex-direction: column;
-}
-
 .link-popup {
     flex: 1 1 auto;
     display: grid;
@@ -35,7 +31,12 @@ page-header>.main-header {
 }
 
 .link-container {
-    display: none;
+    display: flex;
+    justify-content: right;
+}
+
+.link-container>* {
+    padding: 0 1rem;
 }
 
 .link-menu {
@@ -43,20 +44,6 @@ page-header>.main-header {
     display: flex;
     align-items: center;
     justify-content: right;
-}
-
-@media (width >=40rem) {
-    .link-container {
-        display: grid;
-    }
-
-    .link-menu {
-        display: none;
-    }
-
-    page-header>.main-header {
-        flex-direction: row;
-    }
 }
 
 :root {
@@ -100,8 +87,8 @@ content {
 }
 
 pre.codeblock {
-/*     white-space: pre-wrap; */
-/*     overflow-wrap: break-word; */
+    /*     white-space: pre-wrap; */
+    /*     overflow-wrap: break-word; */
     overflow-x: scroll;
     background-color: var(--mantle);
     margin: 1rem;
@@ -113,7 +100,6 @@ pre.codeblock {
 }
 
 .card {
-    white-space: pre-wrap;
     overflow-wrap: break-word;
     background-color: var(--mantle);
     margin: 1rem;
@@ -169,6 +155,10 @@ a:visited {
     color: var(--lavender);
 }
 
+[title] {
+    text-decoration: underline dashed;
+}
+
 page-header>.main-header {
     padding-left: 0.5rem;
     padding-right: 0.5rem;
@@ -197,16 +187,6 @@ page-header {
     margin: 0px;
     background-color: var(--mantle);
     box-shadow: 0px 0px 0.5rem var(--crust);
-}
-
-page-header:has(.link-popup)>.main-header>.links>.link-menu>svg {
-    rotate: 0deg;
-    transition: rotate var(--fast-animation), color var(--fast-animation);
-}
-
-page-header:has(.link-popup.open)>.main-header>.links>.link-menu>svg {
-    rotate: 90deg;
-    color: var(--text);
 }
 
 .link-menu {
@@ -272,7 +252,6 @@ footer>* {
 .project-link:hover {
     transform: translateY(-2px);
     font-style: normal;
-    font-weight: bold;
 }
 
 .footer-text {
@@ -324,7 +303,7 @@ a:hover:has(svg) {
     color: var(--subtext0);
 }
 
-code > span {
+code>span {
     color: #ff00ff;
 }
 
@@ -355,8 +334,20 @@ code > span {
     margin-right: 0.25rem;
 }
 
-.card h2 {
+.card>*:first-child {
     margin-top: 0;
+}
+
+.card>*:last-child {
+    margin-bottom: 0;
+}
+
+.card>*:first-child>*:first-child {
+    margin-top: 0;
+}
+
+.card>*:last-child>*:last-child {
+    margin-bottom: 0;
 }
 
 .code-keyword {

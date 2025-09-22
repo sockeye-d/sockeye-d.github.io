@@ -20,7 +20,7 @@
     </h1>
     <?kt@file:Import; tag("p", "class" to "subtext") {
         append(pubDate.formatDateTime())
-        if (editDate != pubDate) {
+        if (editDate != pubDate && editDate != null) {
             append(", updated ${editDate.formatDateTime()}")
         }
     } ?>

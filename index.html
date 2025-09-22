@@ -3,22 +3,90 @@
 
 <head>
     <meta charset='UTF-8'>
-    <title>kotlin template test</title>
+    <title>fishies.dev</title>
     <meta property='og:title' content='kotlin template test'>
     <meta property='og:description' content='a really long description'>
     <meta property='og:type' content='website'>
     <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="/index.css">
+    <link rel="icon" href="/favicon.ico">
 </head>
 
 <body>
     <?kt headerHtml ?>
     <content>
-        <div class="card">I'm fishnpotatoes!</div>
+        <div class="first-section">
+            <div class="logo-image">
+                <img class="big-image" src="favicon.svg" />
+            </div>
+            <div>
+                <h1>Hi!</h1>
+                <p>I'm fishnpotatoes. I like writing software and solving problems.</p>
+            </div>
+        </div>
+        <h2>What I do</h2>
+        <div class="card">
+            <h3>Programming</h3>
+            <p>I love solving problems and developing tools to make my life easier. Right now I'm really into Kotlin,
+                but I also know GDScript, C#, Java, and JavaScript (in order of favorite to least favorite).</p>
+        </div>
+        <div class="card">
+            <h3>Robotics</h3>
+            <p>
+                I've been doing competitive robotics since 2017, starting with <i>FIRST</i> LEGO League Challenge
+                (although, there was only FLL and FLL Jr. back then) and now I'm doing <i>FIRST</i> Tech Challenge. I've
+                worked with the design, building and the software of the robot, and am proficient in Onshape and Fusion
+                (360).
+            </p>
+            <p>
+
+            </p>
+        </div>
+        <h2>Projects</h2>
+        <div class="card-grid">
+            <?kt@file:Import; (projects as List<Map<String?, Any? >? >).joinToString("") {
+            tag("div", "class" to "card") {
+                if (it == null) {
+                    append("null")
+                    return@tag
+                }
+                tag("a", "href" to "/projects/${(it["path"] as Path).nameWithoutExtension}.html") {
+                    tag("h3") { append(it["title"]) }
+                }
+                for (line in (it["long-description"] as? String)?.lines() ?: emptyList()) {
+                    tag("p") { append(line) }
+                }
+            }
+        } ?>
+        </div>
+        <h2>Recent blog posts <a href="/posts">(view all)</a></h2>
+        <?kt@file:Import; (posts as List<Map<String?, Any? >>)
+            .joinToString("") {
+                val tags = (it["tags"] as List<*>).joinToString(" ") { "post-tag-$it" }
+                tag("div", "class" to "card post-container ${tags}") {
+                    val source = (it["source"] as Path).nameWithoutExtension
+                    tag("a", "href" to "/posts/$source.html") {
+                        tag("h2") {
+                            append(it["title"])
+                        }
+                    }
+                    tag("p") {
+                        append(it["description"])
+                    }
+                    tag("p", "class" to "subtext") {
+                        append("Published ")
+                        append(it["pubDate"].formatDateTime())
+                    }
+                    tag("div", "class" to "tag-container") {
+                        append((it["tags"] as List<*>)
+                            .joinToString("", transform = ::tagHtml)
+                        )
+                    }
+                }
+        }?>
     </content>
     <?kt footerHtml ?>
 </body>
-<link rel='stylesheet' href='/style.css'>
-<link rel='icon' href='/favicon.ico'>
 <script src="/main.js"></script>
 
 </html>

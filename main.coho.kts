@@ -8,19 +8,20 @@ data class Post(
     val description: String,
     val tags: List<String>,
     val pubDate: LocalDateTime,
-    val editDate: LocalDateTime
+    val editDate: LocalDateTime?
 ) {
     companion object {
-        fun String?.parseDt(): LocalDateTime =
-            this?.let { LocalDateTime.parse(it, DateTimeFormatter.ISO_DATE_TIME) } ?: LocalDateTime.MIN
+        fun String?.parseDt(): LocalDateTime? =
+            this?.let { LocalDateTime.parse(it, DateTimeFormatter.ISO_DATE_TIME) }
 
         fun fromFrontmatter(source: Path?, frontmatter: Map<String?, Any?>) = Post(
             source = source,
             title = frontmatter["title"] as? String ?: "null",
             description = frontmatter["description"] as? String ?: "null",
             tags = (frontmatter["tags"] as? List<*>)?.map { it.toString() } ?: emptyList(),
-            pubDate = (frontmatter["published-date"] as? String).parseDt(),
-            editDate = (frontmatter["updated-date"] as? String).parseDt())
+            pubDate = (frontmatter["published-date"] as? String).parseDt() ?: LocalDateTime.MIN,
+            editDate = (frontmatter["updated-date"] as? String).parseDt()
+        )
     }
 
     fun toMap(): Map<String, Any?> = mapOf(
@@ -37,21 +38,29 @@ root {
     val allPosts = source.cd("posts").files("*.md")
         .map { Post.fromFrontmatter(it, parseMarkdownFrontmatter(it.readText()).first ?: emptyMap()) }
         .sortedBy { it.pubDate }.reversed()
+    val allPostsMap = allPosts.map(Post::toMap)
     val allTags = allPosts.flatMap { it.tags as? List<*> ?: emptyList() }.distinct()
 
     markdownTemplate = {
         val title: String? = frontmatter["title"] as? String
         val description: String? = frontmatter["description"] as? String
+        val source: String? = frontmatter["source"] as? String
         val type: String? = frontmatter["type"] as? String
 
         ktMdTemplate(
             src("markdown-template.html"),
-            context = mapOf("title" to title, "description" to description, "type" to type),
+            context = mapOf("title" to title, "description" to description, "source" to source, "type" to type),
         )(it)
     }
 
+    val allProjects = source.cd("projects").files("*.md").mapNotNull {
+        parseMarkdownFrontmatter(it.readText()).first?.plus(mapOf("path" to it))
+    }.toMutableList()
+    // can't do sortedBy for some strange reason
+    allProjects.sortBy { it["priority"] as? Int }
     var globalContext = mutableMapOf<String, Any?>(
-        "projects" to source.cd("projects").files("*.md").map { it.nameWithoutExtension },
+        "projects" to allProjects,
+        "posts" to allPostsMap,
         "gitHash" to exec("git", "rev-parse", "--short", "HEAD"),
         "longGitHash" to exec("git", "rev-parse", "HEAD"),
         "allTags" to allTags,
@@ -68,6 +77,7 @@ root {
     ktHtml(src("index.html"))
     cp(src("main.js"))
     cp(src("style.css"))
+    cp(src("index.css"))
     cp(src("font.css"))
     cp(src("color.css"))
     cp(src("favicon.svg"))
@@ -100,9 +110,7 @@ root {
         }
         source.files("*.md").forEach { md(src(it.name)) }
         val context = mutableMapOf<String, Any?>()
-        run { // populate the posts at build time
-            context["posts"] =
-                allPosts.map { it.toMap() + mapOf("html" to innerHtmls[it.title]) }
+        run {
             val rss = tag("rss", "version" to "2.0") {
                 tag("channel") {
                     tag("title") { append("fishnpotatoes' blog") }
