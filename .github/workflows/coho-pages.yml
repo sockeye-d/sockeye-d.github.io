@@ -9,11 +9,7 @@ jobs:
       - name: Install required packages
         run: |
           sudo apt update
-          sudo apt install libfuse2
-
-          curl -fsSL https://imagemagick.org/archive/binaries/magick -o magick
-          chmod +x magick
-          sudo mv magick /usr/bin
+          sudo apt install imagemagick
       - uses: actions/checkout@v4
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
