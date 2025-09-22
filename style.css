@@ -100,8 +100,9 @@ content {
 }
 
 pre.codeblock {
-    white-space: pre-wrap;
-    overflow-wrap: break-word;
+/*     white-space: pre-wrap; */
+/*     overflow-wrap: break-word; */
+    overflow-x: scroll;
     background-color: var(--mantle);
     margin: 1rem;
     margin-left: 0;
@@ -124,11 +125,23 @@ pre.codeblock {
 }
 
 blockquote {
+    display: flex;
     padding-left: 0.5rem;
     margin-left: 0rem;
     color: var(--subtext0);
-    border-left: 2px solid var(--overlay2);
-    border-radius: 2px;
+}
+
+blockquote::before {
+    background-color: var(--overlay0);
+    flex: 0 3px;
+    margin-right: 0.5rem;
+    border-radius: 1.5px;
+    content: "";
+}
+
+blockquote p {
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 span.inline-code {

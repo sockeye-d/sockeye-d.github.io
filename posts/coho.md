@@ -6,8 +6,6 @@ published-date: "2025-09-21T21:23:37Z"
 updated-date: "2025-09-21T21:23:37Z"
 ```
 
-# Why I wrote coho
-
 There are plenty of other good static website generators, like MkDocs and Hugo.
 So why would I write my own static website framework?
 
@@ -17,18 +15,29 @@ The other option in my mind was writing a pure vanilla HTML/JS/CSS static websit
 
 Also, if you couldn't tell, it's slightly inspired by [nob.h](https://github.com/tsoding/nob.h), although it's diverged from that model quite a bit.
 
+## What coho isn't
+
+Coho is not an all-in-one static website generator.
+It's more of a framework builder to let you build your own little web framework.
+It doesn't come with a preset selection of components.
+It doesn't come with any built-in HTML (well, okay,
+[it has](https://github.com/sockeye-d/coho/blob/f1d0c6d954c21c5866a5297aa8c70a1cf9b2285b/core/src/main/kotlin/dev/fishies/coho/markdown/ProcessedMarkdownFile.kt#L98) a
+[little bit](https://github.com/sockeye-d/coho/blob/f1d0c6d954c21c5866a5297aa8c70a1cf9b2285b/core/src/main/kotlin/dev/fishies/coho/RootPath.kt#L10)),
+and it doesn't control any styles.
+
+That's wasn't my aim — there are plenty of other tools you can use (like the aforementioned Hugo) that do that for you. Rather, I wanted something that'd make the customizability of raw HTML available but also make things like content creation with metadataful Markdown possible as well.
+
 ## The final result
 
-To me coho will likely never be actually fully featured — there'll always be things I can add to make life a little easier. For now though, these are a rough outline of the features it has:
+To me coho will likely never be actually fully featured — there'll always be things I can add to make life a little easier. For now though, these are a rough outline of the "unique" features it has:
 
 * Kotlin DSL-based buildscript
-* Built-in server with live reload
 * Kotlin-templated HTML files
 * Static Markdown HTML generation with build-time syntax highlighting via Prism4j
 
 ## Kotlin DSL buildscript
 
-Coho is really just a Kotlin builder DSL for defining the tree for the build folder.
+Coho is *really* just a Kotlin builder DSL for defining the tree for the build folder.
 There's the root element which defines the root of the output path:
 
 ```kotlin
@@ -128,7 +137,16 @@ This is, for example, how I made [/posts/index.html](/posts/):
 I basically directly iterate over the list of posts and emit extra XML using a basic XML builder, all right inside the HTML.
 This creates an extremely flexible templating system that makes seemingly complex tasks quite simple.
 
-> The `#!kotlin @file:Import;` at the beginning of each section is necessary annoyingly to work around a limitation of the Kotlin scripting engine configuration. It lets you import other scripts, but since the same configuration is applied to all the scripts (including the imported ones!) you get recursive dependency errors because there's no way to remove the included script just for one script. The only way to do that is to hook into the `onAnnotation` configuration refinement callback, hence the random annotation.
+<details>
+<summary>
+<!-- cursed -->
+What's the <span class="inline-code"><code><span class="code-annotation code-builtin code-kotlin-annotation code-kotlin-builtin">@file:Import</span><span class="code-punctuation code-kotlin-punctuation">;</span></code></span> for?
+
+</summary>
+
+The `#!kotlin @file:Import;` at the beginning of each section is necessary annoyingly to work around a limitation of the Kotlin scripting engine configuration. It lets you import other scripts, but since the same configuration is applied to all the scripts (including the imported ones!) you get recursive dependency errors because there's no way to remove the included script just for one script. The only way to do that is to hook into the `onAnnotation` configuration refinement callback, hence the random annotation.
+
+</details>
 
 Also, if you're wondering where the `#!kotlin ::clickableTag` function came from, it's included in the root script like this:
 
@@ -253,6 +271,9 @@ fun runLocalServer(buildPath: Path, reload: StateFlow<Int>, noReloadScript: Bool
         }
     }.start()
 ```
+
+I use a hot StateFlow here to communicate between the server and filesystem watcher coroutines.
+I don't know if this is the best way to do it, but it does work (although it looks a little cursed).
 
 > [coho/cli/src/main/kotlin/dev/fishies/coho/cli/LocalServer.kt at main · sockeye-d/coho](https://github.com/sockeye-d/coho/blob/main/cli/src/main/kotlin/dev/fishies/coho/cli/LocalServer.kt)
 

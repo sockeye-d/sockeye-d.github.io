@@ -3,7 +3,7 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 data class Post(
-    val source: Path,
+    val source: Path?,
     val title: String,
     val description: String,
     val tags: List<String>,
@@ -11,10 +11,10 @@ data class Post(
     val editDate: LocalDateTime
 ) {
     companion object {
-        private fun String?.parseDt(): LocalDateTime =
+        fun String?.parseDt(): LocalDateTime =
             this?.let { LocalDateTime.parse(it, DateTimeFormatter.ISO_DATE_TIME) } ?: LocalDateTime.MIN
 
-        fun fromFrontmatter(source: Path, frontmatter: Map<String?, Any?>) = Post(
+        fun fromFrontmatter(source: Path?, frontmatter: Map<String?, Any?>) = Post(
             source = source,
             title = frontmatter["title"] as? String ?: "null",
             description = frontmatter["description"] as? String ?: "null",
@@ -70,9 +70,9 @@ root {
     cp(src("style.css"))
     cp(src("font.css"))
     cp(src("color.css"))
-    cp(src("favicon.png"))
+    cp(src("favicon.svg"))
     shell(
-        "magick", "-background", "transparent", "favicon.png", "-define", "icon:auto-resize=512,16,32", "favicon.ico",
+        "magick", "-background", "transparent", "favicon.svg", "-define", "icon:auto-resize=512,16,32", "favicon.ico",
     )
     path("projects") {
         source.files("*.md").forEach { md(src(it.name)) }
@@ -87,15 +87,15 @@ root {
     path("posts") {
         val innerHtmls = mutableMapOf<String, String>()
         markdownTemplate = {
-            val title: String? = frontmatter["title"] as? String
-            val description: String? = frontmatter["description"] as? String
-            val type: String? = frontmatter["type"] as? String
-            val tags = frontmatter["tags"] as? List<*> ?: emptyList<String>()
+            val post = Post.fromFrontmatter(source = null, frontmatter = frontmatter)
 
-            title?.let { title -> innerHtmls[title] = it }
+            innerHtmls[post.title] = it
             ktMdTemplate(
                 src("post-template.html"),
-                context = mapOf("title" to title, "description" to description, "type" to type, "tags" to tags),
+                context = mapOf(
+                    "title" to post.title, "description" to post.description,
+                    "tags" to post.tags, "pubDate" to post.pubDate, "editDate" to post.editDate,
+                ),
             )(it)
         }
         source.files("*.md").forEach { md(src(it.name)) }
@@ -119,7 +119,7 @@ root {
                                     append(innerHtmls[post.title])
                                 }
                             }
-                            tag("link") { append("https://fishies.dev/posts/${post.source.nameWithoutExtension}.html") }
+                            tag("link") { append("https://fishies.dev/posts/${post.source?.nameWithoutExtension}.html") }
                             tag("pubDate") {
                                 append(
                                     post.pubDate.atOffset(ZoneOffset.UTC).format(DateTimeFormatter.RFC_1123_DATE_TIME)

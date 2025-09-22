@@ -3,7 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <title><?kt title ?></title>
+    <title>
+        <?kt title ?>
+    </title>
     <meta property="og:title" content="<?kt title ?>">
     <meta property="og:description" content="<?kt description ?>">
     <meta property="og:type" content="website">
@@ -13,6 +15,15 @@
 
 <?kt headerHtml ?>
 <content>
+    <h1>
+        <?kt title ?>
+    </h1>
+    <?kt@file:Import; tag("p", "class" to "subtext") {
+        append(pubDate.formatDateTime())
+        if (editDate != pubDate) {
+            append(", updated ${editDate.formatDateTime()}")
+        }
+    } ?>
     <div class="tag-container">
         <?kt @file:Import tags.joinToString("", transform = ::tagHtml) ?>
     </div>
