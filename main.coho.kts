@@ -87,15 +87,11 @@ root {
     path("projects") {
         source.files("*.md").forEach { md(src(it.name)) }
     }
-    path("components") {
-        ktHtml(src("header.js"))
-        ktHtml(src("footer.js"))
-    }
     path("fonts") {
         source.files().forEach { cp(src(it.name)) }
     }
+    val innerHtmls = mutableMapOf<String, String>()
     path("posts") {
-        val innerHtmls = mutableMapOf<String, String>()
         markdownTemplate = {
             val post = Post.fromFrontmatter(source = null, frontmatter = frontmatter)
 
@@ -110,38 +106,40 @@ root {
         }
         source.files("*.md").forEach { md(src(it.name)) }
         val context = mutableMapOf<String, Any?>()
-        run {
-            val rss = tag("rss", "version" to "2.0") {
-                tag("channel") {
-                    tag("title") { append("fishnpotatoes' blog") }
-                    tag("link") { append("https://fishies.dev/posts") }
-                    tag("description") { append("fishnpotatoes' blog") }
-                    tag("language") { append("en") }
-                    tag("ttl") { append(15) }
+        cp(src("index.js"))
+        ktHtml(src("index.html"), context)
+    }
+    run { path ->
+        val rss = tag("rss", "version" to "2.0") {
+            tag("channel") {
+                tag("title") { append("fishnpotatoes' blog") }
+                tag("link") { append("https://fishies.dev/posts") }
+                tag("description") { append("fishnpotatoes' blog") }
+                tag("language") { append("en") }
+                tag("ttl") { append(15) }
 
-                    for (post in allPosts) {
-                        tag("item") {
-                            tag("title") { append(post.title) }
-                            tag("description") {
-                                cdata {
-                                    append(innerHtmls[post.title])
-                                }
+                for (post in allPosts) {
+                    tag("item") {
+                        tag("title") { append(post.title) }
+                        tag("description") {
+                            cdata {
+                                append(innerHtmls[post.title])
                             }
-                            tag("link") { append("https://fishies.dev/posts/${post.source?.nameWithoutExtension}.html") }
-                            tag("pubDate") {
-                                append(
-                                    post.pubDate.atOffset(ZoneOffset.UTC).format(DateTimeFormatter.RFC_1123_DATE_TIME)
-                                )
-                            }
+                        }
+                        tag("link") {
+                            append("https://fishies.dev/posts/${post.source?.nameWithoutExtension}.html")
+                        }
+                        tag("pubDate") {
+                            append(
+                                post.pubDate.atOffset(ZoneOffset.UTC).format(DateTimeFormatter.RFC_1123_DATE_TIME)
+                            )
                         }
                     }
                 }
             }
-            build("../rss.xml").writeText(rss)
-            emptyList()
         }
-        cp(src("index.js"))
-        ktHtml(src("index.html"), context)
+        path.resolve("rss.xml").writeText(rss)
+        listOf(path.resolve("rss.xml"))
     }
 
     // icons

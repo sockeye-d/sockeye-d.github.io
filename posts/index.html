@@ -14,7 +14,7 @@
 <body>
     <?kt headerHtml ?>
     <content>
-        <h1> Blog posts </h1>
+        <h1> Blog posts <a href="/rss.xml">(feed)</a> </h1>
         <div class="tag-container">
             <?kt@file:Import; allTags.joinToString("", transform = ::clickableTag) ?>
         </div>
