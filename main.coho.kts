@@ -1,6 +1,7 @@
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
+import java.net.URI
 
 data class Post(
     val source: Path?,
@@ -8,7 +9,8 @@ data class Post(
     val description: String,
     val tags: List<String>,
     val pubDate: LocalDateTime,
-    val editDate: LocalDateTime?
+    val editDate: LocalDateTime?,
+    val commentDid: URI?,
 ) {
     companion object {
         fun String?.parseDt(): LocalDateTime? =
@@ -20,7 +22,8 @@ data class Post(
             description = frontmatter["description"] as? String ?: "null",
             tags = (frontmatter["tags"] as? List<*>)?.map { it.toString() } ?: emptyList(),
             pubDate = (frontmatter["published-date"] as? String).parseDt() ?: LocalDateTime.MIN,
-            editDate = (frontmatter["updated-date"] as? String).parseDt()
+            editDate = (frontmatter["updated-date"] as? String).parseDt(),
+            commentDid = (frontmatter["comment-did"] as? String)?.let { URI(it) },
         )
     }
 
@@ -30,7 +33,8 @@ data class Post(
         "description" to description,
         "tags" to tags,
         "pubDate" to pubDate,
-        "editDate" to editDate
+        "editDate" to editDate,
+        "commentDid" to commentDid,
     )
 }
 
@@ -101,14 +105,20 @@ root {
             ktMdTemplate(
                 src("post-template.html"),
                 context = mapOf(
-                    "title" to post.title, "description" to post.description,
-                    "tags" to post.tags, "pubDate" to post.pubDate, "editDate" to post.editDate,
+                    "title" to post.title,
+                    "description" to post.description,
+                    "tags" to post.tags,
+                    "pubDate" to post.pubDate,
+                    "editDate" to post.editDate,
+                    "commentDid" to post.commentDid,
                 ),
             )(it)
         }
         source.files("*.md").forEach { md(src(it.name)) }
         val context = mutableMapOf<String, Any?>()
         cp(src("index.js"))
+        cp(src("index.css"))
+        cp(src("bsky-comments.js"))
         ktHtml(src("index.html"), context)
     }
     run { path ->

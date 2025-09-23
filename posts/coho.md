@@ -3,6 +3,7 @@ title: Why I wrote coho
 description: Why I wrote coho, the Kotlin programmer's static website generator
 tags: [kotlin, web, tooling]
 published-date: "2025-09-21T22:00:00Z"
+comment-did: "at://did:plc:lkrhpzgaij74fjzqeimfyicc/app.bsky.feed.post/3lzinya3iuk2z"
 ```
 
 There are plenty of other good static website generators, like MkDocs and Hugo.

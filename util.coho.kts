@@ -1,4 +1,5 @@
 import java.time.LocalDateTime
+import java.net.URI
 
 fun tagHtml(tag: Any?): String {
     val tag = tag as String
@@ -11,3 +12,7 @@ fun clickableTag(tag: Any?): String {
 }
 
 fun Any?.formatDateTime() = (this as? LocalDateTime)!!.run { """${month.name.lowercase().replaceFirstChar { it.titlecaseChar() }} $dayOfMonth $year""" }
+
+fun URI?.toBskyAppLink() =
+    if (this == null) "null" else
+        "https://bsky.app/profile/${authority}/post/${path.split("/").last()}"

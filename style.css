@@ -270,6 +270,12 @@ footer>* {
     stroke: currentColor;
 }
 
+.icon-smedium {
+    width: 1.25rem;
+    height: 1.25rem;
+    stroke: currentColor;
+}
+
 .icon-medium {
     width: 1.5rem;
     height: 1.5rem;

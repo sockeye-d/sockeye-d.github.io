@@ -11,6 +11,7 @@
     <meta property="og:type" content="website">
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="index.css">
 </head>
 
 <?kt headerHtml ?>
@@ -28,8 +29,12 @@
         <?kt @file:Import tags.joinToString("", transform = ::tagHtml) ?>
     </div>
     <?kt content ?>
+    <h2 id="comments">Comments <a href="<?kt@file:Import; commentDid.toBskyAppLink() ?>">(reply on Bluesky)</a></h2>
+    <!-- URIs are like basically already XML encoded -->
+    <div id="comments-container" atproto-path="<?kt commentDid ?>"></div>
 </content>
 <?kt footerHtml ?>
 <script src="/main.js"></script>
+<script src="bsky-comments.js"></script>
 
 </html>
