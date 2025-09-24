@@ -6,7 +6,14 @@ function sortByPostDate(a, b) {
 
 function formatDate(date) {
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    return `${monthNames[date.getMonth()]} ${date.getDate()} ${date.getFullYear()} at ${(date.getHours() - 1) % 12 + 1}:${date.getMinutes()}:${date.getSeconds()} ${date.getHours() >= 12 ? "PM" : "AM"}`
+    const minute = Math.round(date.getMinutes() + date.getSeconds() / 60.0).toString().padStart(2, "0");
+    return [
+        monthNames[date.getMonth()],
+        date.getDate(),
+        date.getFullYear(),
+        `at ${(date.getHours() - 1) % 12 + 1}:${minute}`,
+        date.getHours() >= 12 ? "PM" : "AM",
+    ].join(" ");
 }
 
 function createPostDisplay(post) {
