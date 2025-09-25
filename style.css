@@ -289,16 +289,26 @@ footer>* {
     padding: 0.125rem;
 }
 
-.socials>a>svg {
-    transition: transform var(--slow-animation);
+a>svg:only-child {
+    padding: 0.5rem;
 }
 
-.socials>a:hover>svg {
-    transform: translateY(-2px);
+@media(pointer: fine) {
+    a>svg:only-child {
+        padding: 0;
+    }
 }
 
 a:hover:has(svg) {
     text-decoration: none;
+}
+
+a>svg:only-child {
+    transition: transform var(--slow-animation);
+}
+
+a:hover>svg:only-child {
+    transform: translateY(-2px);
 }
 
 #themeToggle {

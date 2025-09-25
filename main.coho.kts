@@ -49,11 +49,12 @@ root {
         val title: String? = frontmatter["title"] as? String
         val description: String? = frontmatter["description"] as? String
         val source: String? = frontmatter["source"] as? String
+        val docs: String? = frontmatter["docs"] as? String
         val type: String? = frontmatter["type"] as? String
 
         ktMdTemplate(
             src("markdown-template.html"),
-            context = mapOf("title" to title, "description" to description, "source" to source, "type" to type),
+            context = mapOf("title" to title, "description" to description, "source" to source, "type" to type, "docs" to docs),
         )(it)
     }
 
@@ -91,7 +92,7 @@ root {
     cp(src("favicon.svg"))
     cp(src("favicon.ico"))
     path("projects") {
-        source.files("*.md").forEach { md(src(it.name)) }
+        source.files("*.md").forEach { md(it) }
     }
     path("fonts") {
         source.files().forEach { cp(src(it.name)) }

@@ -15,19 +15,21 @@
 <link rel="stylesheet" href="/style.css">
 <?kt headerHtml ?>
 <content>
-    <h1>
-        <?kt
-        buildString {
-            append(title)
-            if (source != null) {
-                append(" ")
-                tag("a", "href" to source) {
-                    append("""<svg class="icon-medium"><use href="/tabler.svg#tabler-brand-github" /></svg>""")
-                }
+    <?kt
+    buildString {
+        tag("h1") { append(title) }
+        if (source != null) {
+            tag("a", "href" to source) {
+                append("""<svg class="icon-medium"><use href="/tabler.svg#tabler-brand-github" /></svg>""")
             }
         }
-        ?>
-    </h1>
+        if (docs != null) {
+            tag("a", "href" to docs) {
+                append("""<svg class="icon-medium"><use href="/tabler.svg#tabler-book" /></svg>""")
+            }
+        }
+    }
+    ?>
     <?kt content ?>
 </content>
 <?kt footerHtml ?>
