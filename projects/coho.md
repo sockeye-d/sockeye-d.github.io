@@ -171,7 +171,7 @@ Coho has built-in support for parsing GitHub-flavored Markdown and emitting HTML
     <meta property="og:title" content="<?kt title ?>">
     <meta property="og:description" content="<?kt description ?>">
     <meta property="og:type" content="website">
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="viewport" content="&apos;width=device-width,initial-scale=1" />
 </head>
 
 <link rel="stylesheet" href="/style.css">
