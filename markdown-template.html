@@ -17,14 +17,14 @@
 <content>
     <?kt
     buildString {
-        tag("h1") { append(title) }
+        "h1" { append(title) }
         if (source != null) {
-            tag("a", "href" to source) {
+            "a" ("href" to source) {
                 append("""<svg class="icon-medium"><use href="/tabler.svg#tabler-brand-github" /></svg>""")
             }
         }
         if (docs != null) {
-            tag("a", "href" to docs) {
+            "a" ("href" to docs) {
                 append("""<svg class="icon-medium"><use href="/tabler.svg#tabler-book" /></svg>""")
             }
         }

@@ -60,6 +60,11 @@ function createPostDisplay(post) {
 async function populateComments() {
     const commentsContainer = document.querySelector("#comments-container");
     const path = commentsContainer.attributes["atproto-path"].textContent;
+    // yes, it is a string "null"
+    if (path === "null") {
+        commentsContainer.innerHTML = "<p>Please wait a few minutes, the link hasn't been updated yet</p>";
+        return
+    }
     const commentsResponse = await fetch("https://public.api.bsky.app/xrpc/app.bsky.feed.getPostThread?uri=" + path);
 
     if (!commentsResponse.ok) {

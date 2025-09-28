@@ -1,7 +1,7 @@
 ```yaml
 title: Why I wrote coho
 description: Why I wrote coho, the Kotlin programmer's static website generator
-tags: [kotlin, web, tooling]
+tags: [kotlin, coho, web, tooling]
 published-date: "2025-09-21T22:00:00Z"
 comment-did: "at://did:plc:lkrhpzgaij74fjzqeimfyicc/app.bsky.feed.post/3lzinya3iuk2z"
 ```
@@ -102,21 +102,21 @@ This is, for example, how I made [/posts/index.html](/posts/):
         <?kt@file:Import; (posts as List<Map<String?, Any? >>)
             .joinToString("") {
                 val tags = (it["tags"] as List<*>).joinToString(" ") { "post-tag-$it" }
-                tag("div", "class" to "card post-container ${tags}") {
+                "div" ("class" to "card post-container ${tags}") {
                     val source = (it["source"] as Path).nameWithoutExtension
-                    tag("a", "href" to "/posts/$source.html") {
-                        tag("h2") {
+                    "a" ("href" to "/posts/$source.html") {
+                        "h2" {
                             append(it["title"])
                         }
                     }
-                    tag("p") {
+                    "p" {
                         append(it["description"])
                     }
-                    tag("p", "class" to "subtext") {
+                    "p" ("class" to "subtext") {
                         append("Published ")
                         append(it["pubDate"].formatDateTime())
                     }
-                    tag("div", "class" to "tag-container") {
+                    "div" ("class" to "tag-container") {
                         append((it["tags"] as List<*>)
                             .joinToString("", transform = ::clickableTag)
                         )

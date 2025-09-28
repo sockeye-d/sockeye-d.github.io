@@ -16,29 +16,33 @@
     <content>
         <h1> Blog posts <a href="/rss.xml">(feed)</a> </h1>
         <div class="tag-container">
-            <?kt@file:Import; allTags.joinToString("", transform = ::clickableTag) ?>
+            <?kt@file:Import; allTags.joinToString("") { it: Any? ->
+                clickableTag(it, (tagCounts as Map<String, Int>)[it])
+            }?>
         </div>
         <?kt@file:Import; (posts as List<Map<String?, Any? >>)
             .joinToString("") {
-                val tags = (it["tags"] as List<*>).joinToString(" ") { "post-tag-$it" }
-                tag("div", "class" to "card post-container ${tags}") {
-                    val source = (it["source"] as Path).nameWithoutExtension
-                    tag("a", "href" to "/posts/$source.html") {
-                        tag("h2") {
-                            append(it["title"])
+                html {
+                    val tags = (it["tags"] as List<*>).joinToString(" ") { "post-tag-$it" }
+                    "div" ("class" to "card post-container ${tags}") {
+                        val source = (it["source"] as Path).nameWithoutExtension
+                        "a" ("href" to "/posts/$source.html") {
+                            "h2" {
+                                append(it["title"])
+                            }
                         }
-                    }
-                    tag("p") {
-                        append(it["description"])
-                    }
-                    tag("p", "class" to "subtext") {
-                        append("Published ")
-                        append(it["pubDate"].formatDateTime())
-                    }
-                    tag("div", "class" to "tag-container") {
-                        append((it["tags"] as List<*>)
-                            .joinToString("", transform = ::clickableTag)
-                        )
+                        "p" {
+                            append(it["description"])
+                        }
+                        "p" ("class" to "subtext") {
+                            append("Published ")
+                            append(it["pubDate"].formatDateTime())
+                        }
+                        "div" ("class" to "tag-container") {
+                            append((it["tags"] as List<*>)
+                                .joinToString("", transform = ::clickableTag)
+                            )
+                        }
                     }
                 }
             }?>

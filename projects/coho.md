@@ -43,21 +43,21 @@ For example, this is the [posts page's source](/posts/):
         <?kt@file:Import; (posts as List<Map<String?, Any? >>)
             .joinToString("") {
                 val tags = (it["tags"] as List<*>).joinToString(" ") { "post-tag-$it" }
-                tag("div", "class" to "card post-container ${tags}") {
+                "div" ("class" to "card post-container ${tags}") {
                     val source = (it["source"] as Path).nameWithoutExtension
-                    tag("a", "href" to "/posts/$source.html") {
-                        tag("h2") {
+                    "a" ("href" to "/posts/$source.html") {
+                        "h2" {
                             append(it["title"])
                         }
                     }
-                    tag("p") {
+                    "p" {
                         append(it["description"])
                     }
-                    tag("p", "class" to "subtext") {
+                    "p" ("class" to "subtext") {
                         append("Published ")
                         append(it["pubDate"].formatDateTime())
                     }
-                    tag("div", "class" to "tag-container") {
+                    "div" ("class" to "tag-container") {
                         append((it["tags"] as List<*>)
                             .joinToString("", transform = ::clickableTag)
                         )
@@ -67,8 +67,8 @@ For example, this is the [posts page's source](/posts/):
     </content>
     <?kt footerHtml ?>
 </body>
-<script src="/main.js"> </script>
-<script src="/posts/index.js"> </script>
+<script src="/main.js"></script>
+<script src="/posts/index.js"></script>
 
 </html>
 ```
@@ -171,7 +171,7 @@ Coho has built-in support for parsing GitHub-flavored Markdown and emitting HTML
     <meta property="og:title" content="<?kt title ?>">
     <meta property="og:description" content="<?kt description ?>">
     <meta property="og:type" content="website">
-    <meta name="viewport" content="&apos;width=device-width,initial-scale=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
 </head>
 
 <link rel="stylesheet" href="/style.css">
@@ -179,14 +179,14 @@ Coho has built-in support for parsing GitHub-flavored Markdown and emitting HTML
 <content>
     <?kt
     buildString {
-        tag("h1") { append(title) }
+        "h1" { append(title) }
         if (source != null) {
-            tag("a", "href" to source) {
+            "a" ("href" to source) {
                 append("""<svg class="icon-medium"><use href="/tabler.svg#tabler-brand-github" /></svg>""")
             }
         }
         if (docs != null) {
-            tag("a", "href" to docs) {
+            "a" ("href" to docs) {
                 append("""<svg class="icon-medium"><use href="/tabler.svg#tabler-book" /></svg>""")
             }
         }
@@ -195,7 +195,7 @@ Coho has built-in support for parsing GitHub-flavored Markdown and emitting HTML
     <?kt content ?>
 </content>
 <?kt footerHtml ?>
-<script src="/main.js"> </script>
+<script src="/main.js"></script>
 
 </html>
 ```

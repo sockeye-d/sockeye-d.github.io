@@ -45,16 +45,18 @@
         <h2>Projects</h2>
         <div class="card-grid">
             <?kt@file:Import; (projects as List<Map<String?, Any? >? >).joinToString("") {
-            tag("div", "class" to "card") {
-                if (it == null) {
-                    append("null")
-                    return@tag
-                }
-                tag("a", "href" to "/projects/${(it["path"] as Path).nameWithoutExtension}.html") {
-                    tag("h3") { append(it["title"]) }
-                }
-                for (line in (it["long-description"] as? String)?.lines() ?: emptyList()) {
-                    tag("p") { append(line) }
+            html {
+                "div" ("class" to "card") {
+                    if (it == null) {
+                        append("null")
+                        return@invoke
+                    }
+                    "a" ("href" to "/projects/${(it["path"] as Path).nameWithoutExtension}.html") {
+                        "h3" { append(it["title"]) }
+                    }
+                    for (line in (it["long-description"] as? String)?.lines() ?: emptyList()) {
+                        "p" { append(line) }
+                    }
                 }
             }
         } ?>
@@ -63,19 +65,21 @@
         <div class="card-grid">
             <?kt@file:Import; (posts as List<Map<String?, Any? >>)
             .joinToString("") {
-                tag("div", "class" to "card post-container") {
-                    val source = (it["source"] as Path).nameWithoutExtension
-                    tag("a", "href" to "/posts/$source.html") {
-                        tag("h3") {
-                            append(it["title"])
+                html {
+                    "div" ("class" to "card post-container") {
+                        val source = (it["source"] as Path).nameWithoutExtension
+                        "a" ("href" to "/posts/$source.html") {
+                            "h3" {
+                                append(it["title"])
+                            }
+                        }
+                        "p" ("class" to "subtext") {
+                            append("Published ")
+                            append(it["pubDate"].formatDateTime())
                         }
                     }
-                    tag("p", "class" to "subtext") {
-                        append("Published ")
-                        append(it["pubDate"].formatDateTime())
-                    }
                 }
-        }?>
+            }?>
         </div>
     </content>
     <?kt footerHtml ?>

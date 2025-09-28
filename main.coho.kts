@@ -2,6 +2,7 @@ import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.net.URI
+import java.nio.file.Path
 
 data class Post(
     val source: Path?,
@@ -43,7 +44,13 @@ root {
         .map { Post.fromFrontmatter(it, parseMarkdownFrontmatter(it.readText()).first ?: emptyMap()) }
         .sortedBy { it.pubDate }.reversed()
     val allPostsMap = allPosts.map(Post::toMap)
-    val allTags = allPosts.flatMap { it.tags as? List<*> ?: emptyList() }.distinct()
+    val allTagsNotDistinct =
+        allPosts.flatMap { it.tags as? List<*> ?: emptyList() }.mapNotNull { it as? String }
+    val allTags = allTagsNotDistinct.distinct()
+    val tagCounts = mutableMapOf<String, Int>()
+    for (tag in allTagsNotDistinct) {
+        tagCounts[tag] = (tagCounts[tag] ?: 0) + 1
+    }
 
     markdownTemplate = {
         val title: String? = frontmatter["title"] as? String
@@ -54,7 +61,13 @@ root {
 
         ktMdTemplate(
             src("markdown-template.html"),
-            context = mapOf("title" to title, "description" to description, "source" to source, "type" to type, "docs" to docs),
+            context = mapOf(
+                "title" to title,
+                "description" to description,
+                "source" to source,
+                "type" to type,
+                "docs" to docs
+            ),
         )(it)
     }
 
@@ -69,6 +82,7 @@ root {
         "gitHash" to exec("git", "rev-parse", "--short", "HEAD"),
         "longGitHash" to exec("git", "rev-parse", "HEAD"),
         "allTags" to allTags,
+        "tagCounts" to tagCounts,
         "root" to this,
     )
     KtHtmlFile.globalContext = globalContext;
@@ -87,7 +101,13 @@ root {
     cp(src("color.css"))
     if (src("favicon.ico").notExists())
         exec(
-            "convert", "-background", "transparent", "favicon.svg", "-define", "icon:auto-resize=512,16,32", "favicon.ico",
+            "convert",
+            "-background",
+            "transparent",
+            "favicon.svg",
+            "-define",
+            "icon:auto-resize=512,16,32",
+            "favicon.ico",
         )
     cp(src("favicon.svg"))
     cp(src("favicon.ico"))
@@ -123,26 +143,26 @@ root {
         ktHtml(src("index.html"), context)
     }
     run { path ->
-        val rss = tag("rss", "version" to "2.0") {
-            tag("channel") {
-                tag("title") { append("fishnpotatoes' blog") }
-                tag("link") { append("https://fishies.dev/posts") }
-                tag("description") { append("fishnpotatoes' blog") }
-                tag("language") { append("en") }
-                tag("ttl") { append(15) }
+        val rss = "rss"("version" to "2.0") {
+            "channel" {
+                "title" { append("fishnpotatoes' blog") }
+                "link" { append("https://fishies.dev/posts") }
+                "description" { append("fishnpotatoes' blog") }
+                "language" { append("en") }
+                "ttl" { append(15) }
 
                 for (post in allPosts) {
-                    tag("item") {
-                        tag("title") { append(post.title) }
-                        tag("description") {
+                    "item" {
+                        "title" { append(post.title) }
+                        "description" {
                             cdata {
                                 append(innerHtmls[post.title])
                             }
                         }
-                        tag("link") {
+                        "link" {
                             append("https://fishies.dev/posts/${post.source?.nameWithoutExtension}.html")
                         }
-                        tag("pubDate") {
+                        "pubDate" {
                             append(
                                 post.pubDate.atOffset(ZoneOffset.UTC).format(DateTimeFormatter.RFC_1123_DATE_TIME)
                             )
