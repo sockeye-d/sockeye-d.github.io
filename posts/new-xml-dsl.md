@@ -3,7 +3,7 @@ title: Making an XML DSL for Kotlin
 description: Making an XML DSL for Kotlin in 2 different ways
 tags: [kotlin, coho, dsl]
 published-date: "2025-09-27T22:00:00Z"
-# comment-did: "at://did:plc:lkrhpzgaij74fjzqeimfyicc/app.bsky.feed.post/3lzinya3iuk2z"
+comment-did: "at://did:plc:lkrhpzgaij74fjzqeimfyicc/app.bsky.feed.post/3lzuaqwkbm223"
 ```
 
 In making [coho](/posts/coho.md), I needed a quick and easy way to generate some XML.
