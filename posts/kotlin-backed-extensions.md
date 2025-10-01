@@ -4,6 +4,7 @@ description: >
     A cursed episode for the start of October: making an extension property with a backing field in Kotlin
 tags: [kotlin, cursed]
 published-date: "2025-10-01T20:12:00Z"
+comment-did: "at://did:plc:lkrhpzgaij74fjzqeimfyicc/app.bsky.feed.post/3m25udn7ey22f"
 ```
 
 It's October now, and that means the Spooky Season™ is upon us.
