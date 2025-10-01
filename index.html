@@ -2,11 +2,11 @@
 <html>
 
 <head>
-    <meta charset='UTF-8'>
+    <meta charset="UTF-8">
     <title>fishies.dev</title>
-    <meta property='og:title' content='kotlin template test'>
-    <meta property='og:description' content='a really long description'>
-    <meta property='og:type' content='website'>
+    <meta property="og:title" content="fishies.dev">
+    <meta property="og:description" content="fishnpotatoes' website'">
+    <meta property="og:type" content="website">
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <link rel="stylesheet" href="/index.css">
     <link rel="icon" href="/favicon.ico">
@@ -45,7 +45,6 @@
         <h2>Projects</h2>
         <div class="card-grid">
             <?kt@file:Import; (projects as List<Map<String?, Any? >? >).joinToString("") {
-            html {
                 "div" ("class" to "card") {
                     if (it == null) {
                         append("null")
@@ -58,25 +57,22 @@
                         "p" { append(line) }
                     }
                 }
-            }
-        } ?>
+            } ?>
         </div>
         <h2>Recent blog posts <a href="/posts">(view all)</a></h2>
-        <div class="card-grid">
+        <div>
             <?kt@file:Import; (posts as List<Map<String?, Any? >>)
             .joinToString("") {
-                html {
-                    "div" ("class" to "card post-container") {
-                        val source = (it["source"] as Path).nameWithoutExtension
-                        "a" ("href" to "/posts/$source.html") {
-                            "h3" {
-                                append(it["title"])
-                            }
+                "div" ("class" to "card mini-post-card") {
+                    val source = (it["source"] as Path).nameWithoutExtension
+                    "a" ("href" to "/posts/$source.html") {
+                        "span" {
+                            append(it["title"])
                         }
-                        "p" ("class" to "subtext") {
-                            append("Published ")
-                            append(it["pubDate"].formatDateTime())
-                        }
+                    }
+                    "span" ("class" to "subtext") {
+                        append(" Published ")
+                        append(it["pubDate"].formatDateTime())
                     }
                 }
             }?>

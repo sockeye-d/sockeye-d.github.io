@@ -6,7 +6,8 @@ source: "https://github.com/sockeye-d/routine"
 long-description: >
     Routine is an FTC library I wrote.
     It was designed as an implementation of <a href="https://www.chiefdelphi.com/t/500699">WPILib's V3 command library</a>, which uses techniques unsuitable for FTC due to requiring a modern (e.g., non-Android) JVM.
-    Since Kotlin implements its coroutine model <i>without</i> JVM green threads, instead opting for a state machine transformation in the compiler, it can run on an Android JVM, and is thus suitable for FTC use.
+
+    Since Kotlin implements its coroutine model <i>without</i> JVM Project Loom green threads, instead opting for a state machine transformation in the compiler, it can run on an Android JVM, and is thus suitable for FTC use.
 ```
 Routine is an FTC library I wrote.
 It was designed as an implementation of [WPILib's V3 command library](https://www.chiefdelphi.com/t/500699), which uses techniques unsuitable for FTC due to requiring a modern (e.g., non-Android) JVM.

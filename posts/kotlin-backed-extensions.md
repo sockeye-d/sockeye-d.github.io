@@ -3,12 +3,11 @@ title: How to make an extension property with a backing field in Kotlin
 description: >
     A cursed episode for the start of October: making an extension property with a backing field in Kotlin
 tags: [kotlin, cursed]
-published-date: "2025-10-01T22:00:00Z"
-hide: true
+published-date: "2025-10-01T20:12:00Z"
 ```
 
 It's October now, and that means the Spooky Season™ is upon us.
-(if you're a large retailer, spooky season started 3 months ago).
+(although, if you're a large retailer, spooky season started 3 months ago).
 To "celebrate," I want to do something spooky in Kotlin.
 
 ## Giving extension properties their backing fields back
@@ -43,7 +42,7 @@ val Double.five = 5.0
     set(value) {
         field = 10.0
     }
-    get() = field * 2.0
+    get() = field / 2.0
 ```
 
 But like, what if you could?
@@ -120,6 +119,11 @@ We've fixed the issue.
 Since strings on the JVM (and many other runtimes, like the CLR) are [interned](https://en.wikipedia.org/wiki/Interning_(computer_science)), you can do some pretty cursed stuff:
 
 ```kotlin
+private val backing = WeakHashMap<String, String>()
+var String.hello
+    set(value) { backing[this] = value }
+    get() = backing[this] ?: error("not found")
+
 fun main() {
     "a".hello = "hi"
     "b".hello = "hello"
@@ -131,13 +135,16 @@ fun main() {
 You can do even *more* cursed things:
 
 ```kotlin
+private val backing = WeakHashMap<Int, String>()
+var Int.hello
+    set(value) { backing[this] = value }
+    get() = backing[this] ?: error("not found")
+
 5.hello = "hihihihihi"
 10.hello = "hihihihihihihihihihi"
 println(5.hello) // "hihihihihi"
 println(10.hello) // "hihihihihihihihihihi"
 ```
-
-The implementation of these properties is left as a detail to the reader.
 
 ## Property delegation
 
@@ -159,7 +166,7 @@ Using this, you can wrap the cursed backed extension fields into a nice little f
 ```kotlin
 fun <K, V> backed() = object : ReadWriteProperty<K, V> {
     val backing = WeakHashMap<K, V>()
-    override fun getValue(thisRef: K, property: KProperty<*>): V = backing[thisRef] ?: error("Key $thisRef found")
+    override fun getValue(thisRef: K, property: KProperty<*>): V = backing[thisRef] ?: error("Key $thisRef not found")
     override fun setValue(thisRef: K, property: KProperty<*>, value: V) {
         backing[thisRef] = value
     }
@@ -177,5 +184,4 @@ var String.hello: String by backed()
 
 Honestly, it feels like something so illegal shouldn't be able to be written in 7 lines of code, and used in just 1.
 The type inference algorithm even figures out what the two type parameters should be from the property definition!
-It's almost *too* convenient!
-Now I want to use this everywhere!
+It's almost *too* convenient, and now I want to use this everywhere.

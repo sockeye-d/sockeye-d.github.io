@@ -45,3 +45,13 @@
     margin-top: 0;
     margin-bottom: 0;
 }
+
+.mini-post-card {
+    display: flex;
+    justify-content: space-between;
+}
+
+/*.mini-post-card > :last-child {
+    text-align: right;
+    float: right;
+}*/

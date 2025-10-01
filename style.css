@@ -220,6 +220,10 @@ footer>* {
     padding-bottom: 4px;
 }
 
+footer>p.footer-text {
+    margin: 0 0.5rem;
+}
+
 .link-container {
     flex: 1 1 auto;
     grid-template-rows: repeat(2, 1fr);
