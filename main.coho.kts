@@ -12,20 +12,22 @@ data class Post(
     val pubDate: LocalDateTime,
     val editDate: LocalDateTime?,
     val commentDid: URI?,
+    val hide: Boolean,
 ) {
     companion object {
         fun String?.parseDt(): LocalDateTime? =
             this?.let { LocalDateTime.parse(it, DateTimeFormatter.ISO_DATE_TIME) }
 
         fun fromFrontmatter(source: Path?, frontmatter: Map<String?, Any?>) = Post(
-            source = source,
-            title = frontmatter["title"] as? String ?: "null",
-            description = frontmatter["description"] as? String ?: "null",
-            tags = (frontmatter["tags"] as? List<*>)?.map { it.toString() } ?: emptyList(),
-            pubDate = (frontmatter["published-date"] as? String).parseDt() ?: LocalDateTime.MIN,
-            editDate = (frontmatter["updated-date"] as? String).parseDt(),
-            commentDid = (frontmatter["comment-did"] as? String)?.let { URI(it) },
-        )
+                source = source,
+                title = frontmatter["title"] as? String ?: "null",
+                description = frontmatter["description"] as? String ?: "null",
+                tags = (frontmatter["tags"] as? List<*>)?.map { it.toString() } ?: emptyList(),
+                pubDate = (frontmatter["published-date"] as? String).parseDt() ?: LocalDateTime.MIN,
+                editDate = (frontmatter["updated-date"] as? String).parseDt(),
+                commentDid = (frontmatter["comment-did"] as? String)?.let { URI(it) },
+                hide = (frontmatter["hide"] as? Boolean) ?: false,
+            )
     }
 
     fun toMap(): Map<String, Any?> = mapOf(
@@ -36,12 +38,14 @@ data class Post(
         "pubDate" to pubDate,
         "editDate" to editDate,
         "commentDid" to commentDid,
+        "hide" to hide,
     )
 }
 
 root {
     val allPosts = source.cd("posts").files("*.md")
         .map { Post.fromFrontmatter(it, parseMarkdownFrontmatter(it.readText()).first ?: emptyMap()) }
+        .filter { !it.hide }
         .sortedBy { it.pubDate }.reversed()
     val allPostsMap = allPosts.map(Post::toMap)
     val allTagsNotDistinct =
@@ -135,7 +139,7 @@ root {
                 ),
             )(it)
         }
-        source.files("*.md").forEach { md(src(it.name)) }
+        allPosts.forEach { md(it.source!!) }
         val context = mutableMapOf<String, Any?>()
         cp(src("index/index.js"))
         cp(src("index/index.css"))
