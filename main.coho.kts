@@ -124,7 +124,7 @@ root {
 
             innerHtmls[post.title] = it
             ktMdTemplate(
-                src("post-template.html"),
+                src("index/post-template.html"),
                 context = mapOf(
                     "title" to post.title,
                     "description" to post.description,
@@ -137,10 +137,10 @@ root {
         }
         source.files("*.md").forEach { md(src(it.name)) }
         val context = mutableMapOf<String, Any?>()
-        cp(src("index.js"))
-        cp(src("index.css"))
-        cp(src("bsky-comments.js"))
-        ktHtml(src("index.html"), context)
+        cp(src("index/index.js"))
+        cp(src("index/index.css"))
+        cp(src("index/bsky-comments.js"))
+        ktHtml(src("index/index.html"), context)
     }
     run { path ->
         val rss = "rss"("version" to "2.0") {
