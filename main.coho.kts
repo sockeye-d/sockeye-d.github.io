@@ -15,19 +15,18 @@ data class Post(
     val hide: Boolean,
 ) {
     companion object {
-        fun String?.parseDt(): LocalDateTime? =
-            this?.let { LocalDateTime.parse(it, DateTimeFormatter.ISO_DATE_TIME) }
+        fun String?.parseDt(): LocalDateTime? = this?.let { LocalDateTime.parse(it, DateTimeFormatter.ISO_DATE_TIME) }
 
         fun fromFrontmatter(source: Path?, frontmatter: Map<String?, Any?>) = Post(
-                source = source,
-                title = frontmatter["title"] as? String ?: "null",
-                description = frontmatter["description"] as? String ?: "null",
-                tags = (frontmatter["tags"] as? List<*>)?.map { it.toString() } ?: emptyList(),
-                pubDate = (frontmatter["published-date"] as? String).parseDt() ?: LocalDateTime.MIN,
-                editDate = (frontmatter["updated-date"] as? String).parseDt(),
-                commentDid = (frontmatter["comment-did"] as? String)?.let { URI(it) },
-                hide = (frontmatter["hide"] as? Boolean) ?: false,
-            )
+            source = source,
+            title = frontmatter["title"] as? String ?: "null",
+            description = frontmatter["description"] as? String ?: "null",
+            tags = (frontmatter["tags"] as? List<*>)?.map { it.toString() } ?: emptyList(),
+            pubDate = (frontmatter["published-date"] as? String).parseDt() ?: LocalDateTime.MIN,
+            editDate = (frontmatter["updated-date"] as? String).parseDt(),
+            commentDid = (frontmatter["comment-did"] as? String)?.let { URI(it) },
+            hide = (frontmatter["hide"] as? Boolean) ?: false,
+        )
     }
 
     fun toMap(): Map<String, Any?> = mapOf(
@@ -43,13 +42,24 @@ data class Post(
 }
 
 root {
+    val ignoreProjects = "ignore-projects" in arguments
+    val onlyLatestPost = "latest-post" in arguments
+    val showHidden = "show-hidden" in arguments
+
+    if (ignoreProjects) {
+        println("Ignoring projects")
+    }
+
+    if (onlyLatestPost) {
+        println("Only building latest post")
+    }
+
     val allPosts = source.cd("posts").files("*.md")
         .map { Post.fromFrontmatter(it, parseMarkdownFrontmatter(it.readText()).first ?: emptyMap()) }
-        .filter { !it.hide }
-        .sortedBy { it.pubDate }.reversed()
+        .filter { !it.hide || showHidden }.sortedBy { it.pubDate }.reversed()
+        .let { posts -> if (onlyLatestPost) posts.take(1) else posts }
     val allPostsMap = allPosts.map(Post::toMap)
-    val allTagsNotDistinct =
-        allPosts.flatMap { it.tags as? List<*> ?: emptyList() }.mapNotNull { it as? String }
+    val allTagsNotDistinct = allPosts.flatMap { it.tags as? List<*> ?: emptyList() }.mapNotNull { it as? String }
     val allTags = allTagsNotDistinct.distinct()
     val tagCounts = mutableMapOf<String, Int>()
     for (tag in allTagsNotDistinct) {
@@ -66,19 +76,14 @@ root {
         ktMdTemplate(
             src("markdown-template.html"),
             context = mapOf(
-                "title" to title,
-                "description" to description,
-                "source" to source,
-                "type" to type,
-                "docs" to docs
+                "title" to title, "description" to description, "source" to source, "type" to type, "docs" to docs
             ),
         )(it)
     }
 
     val allProjects = source.cd("projects").files("*.md").mapNotNull {
         parseMarkdownFrontmatter(it.readText()).first?.plus(mapOf("path" to it))
-    }.toMutableList()
-    // can't do sortedBy for some strange reason
+    }.toMutableList() // can't do sortedBy for some strange reason
     allProjects.sortBy { it["priority"] as? Int }
     var globalContext = mutableMapOf<String, Any?>(
         "projects" to allProjects,
@@ -103,16 +108,15 @@ root {
     cp(src("index.css"))
     cp(src("font.css"))
     cp(src("color.css"))
-    if (src("favicon.ico").notExists())
-        exec(
-            "convert",
-            "-background",
-            "transparent",
-            "favicon.svg",
-            "-define",
-            "icon:auto-resize=512,16,32",
-            "favicon.ico",
-        )
+    if (src("favicon.ico").notExists()) exec(
+        "convert",
+        "-background",
+        "transparent",
+        "favicon.svg",
+        "-define",
+        "icon:auto-resize=512,16,32",
+        "favicon.ico",
+    )
     cp(src("favicon.svg"))
     cp(src("favicon.ico"))
     path("projects") {
@@ -123,6 +127,10 @@ root {
     }
     val innerHtmls = mutableMapOf<String, String>()
     path("posts") {
+        path ("resources") {
+            source.files().forEach { cp(src(it.name)) }
+        }
+
         markdownTemplate = {
             val post = Post.fromFrontmatter(source = null, frontmatter = frontmatter)
 

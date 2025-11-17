@@ -8,12 +8,13 @@
 :root {
     --h1-font-size: 32px;
     --h2-font-size: 24px;
-    --h3-font-size: 18px;
+    --h3-font-size: 22px;
     --font-size: 18px;
 
+    tab-size: 4;
 }
 
-p {
+p, ul, ol, table {
     line-height: 1.75rem;
 }
 
@@ -62,10 +63,12 @@ h1 {
 
 h2 {
     font-size: var(--h2-font-size);
+    font-weight: bold;
 }
 
 h3 {
     font-size: var(--h3-font-size);
+    font-weight: normal;
 }
 
 h1 {
@@ -117,18 +120,10 @@ pre.codeblock {
 }
 
 blockquote {
-    display: flex;
     padding-left: 0.5rem;
     margin-left: 0rem;
     color: var(--subtext0);
-}
-
-blockquote::before {
-    background-color: var(--overlay0);
-    flex: 0 0 3px;
-    margin-right: 0.5rem;
-    border-radius: 1.5px;
-    content: "";
+    border-left: 2px solid var(--overlay0);
 }
 
 blockquote p {
@@ -141,6 +136,19 @@ span.inline-code {
     border-radius: 4px;
     padding: 0.2rem;
     box-shadow: 0px 0.2rem 0.3rem color-mix(in srgb, var(--mantle) 70%, #7f000000);
+    box-sizing: content-box;
+}
+
+a span.inline-code {
+    border: 1px solid var(--blue);
+}
+
+a:visited span.inline-code {
+    border-color: var(--lavender);
+}
+
+a:hover span.inline-code {
+    border-color: var(--sky);
 }
 
 code {
@@ -149,8 +157,7 @@ code {
 
 a {
     color: var(--blue);
-    text-decoration: underline;
-    text-decoration-color: transparent;
+    text-decoration: none;
 }
 
 a:hover {
@@ -163,6 +170,10 @@ a:visited {
 
 [title] {
     text-decoration: underline dashed;
+}
+
+.user-del {
+    text-decoration: line-through;
 }
 
 page-header>.main-header {
@@ -356,6 +367,46 @@ code>span {
     transition: background-color var(--fast-animation), border var(--fast-animation);
 }
 
+content {
+    text-align: justify;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 0.5rem;
+    border: 1px solid var(--overlay0);
+}
+
+th {
+    font-weight: bold;
+    text-align: center;
+    background-color: var(--mantle);
+}
+
+content .bluesky-embed {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    background-color: black;
+    overflow: hidden;
+}
+
+content img {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    width: 50%;
+}
+
+content table {
+    margin-left: auto;
+    margin-right: auto;
+    width: 75%;
+}
+
 .tag-container a svg {
     margin-right: 0.25rem;
 }
@@ -377,6 +428,10 @@ code>span {
 }
 
 .code-keyword {
+    color: var(--mauve);
+}
+
+.code-null {
     color: var(--mauve);
 }
 
@@ -402,7 +457,7 @@ code>span {
 }
 
 .code-annotation {
-    color: var(--yellow);
+    color: var(--maroon);
 }
 
 .code-punctuation {
@@ -504,4 +559,10 @@ code>span {
 .code-doctype {
     color: var(--mauve);
     font-weight: bold;
+}
+
+.latex svg {
+    fill: currentColor;
+/*     margin-bottom: -0.25em; */
+    vertical-align: middle;
 }
