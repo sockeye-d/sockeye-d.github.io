@@ -3,85 +3,12 @@ title: Serializing data in Godot
 description: >
     A comparison of Godot's various serialization methods
 tags: [godot, gdscript]
-published-date: "2025-11-17T20:12:00Z"
+published-date: "2025-11-18T05:46:00Z"
 # comment-did: "at://did:plc:lkrhpzgaij74fjzqeimfyicc/app.bsky.feed.post/3m25udn7ey22f"
 hide: true
 ```
 
 Godot contains multiple ways to serialize data, each with their own positives and negatives. While this is subjective, I hope it gives some context as to which might be right for you.
-
-## ConfigFile (INI)
-
-[`#!gdscript ConfigFile`](https://docs.godotengine.org/en/stable/classes/class_configfile.html) is Godot's [INI-style](https://en.wikipedia.org/wiki/INI_file) data serialization method. Its API is simple to use but somewhat lacking. Unlike JSON, it doesn't store structured objects like a Dictionary directly. Rather, each file is split into `[section]`s containing any number of `key=value` pairs. For example, this code
-
-```gdscript
-var config := ConfigFile.new()
-config.set_value("a section", "a value", "hi")
-```
-
-generates this file:
-
-```ini
-[a section]
-
-"a value"="hi"
-```
-
-Without any whitespace, escaped quotes, or `=` in the key, it generates without quotes:
-
-```ini
-a-value="hi"
-```
-
-You can also insert an entire `#!gdscript Dictionary` or `#!gdscript Array` as the value.
-
-```gdscript
-var typed_dict: Dictionary[String, int] = {
-    "hi": 1,
-    "hello": 2,
-}
-var packed_array: PackedInt32Array = [1, 2, 3]
-var typed_array: Array[StringName] = ["1", "2", "3"]
-var untyped_dict: Dictionary = {
-    "a": "b",
-    5: 10,
-}
-var untyped_array: Array = [1, "2", 3]
-config.set_value("", "typed_dict", typed_dict)
-config.set_value("", "packed_array", packed_array)
-config.set_value("", "typed_array", typed_array)
-config.set_value("untyped", "untyped_dict", untyped_dict)
-config.set_value("untyped", "untyped_array", untyped_array)
-```
-
-```ini
-typed_dict=Dictionary[String, int]({
-"hello": 2,
-"hi": 1
-})
-packed_array=PackedInt32Array(1, 2, 3)
-typed_array=Array[StringName]([&"1", &"2", &"3"])
-
-[untyped]
-
-untyped_dict={
-5: 10,
-"a": "b"
-}
-untyped_array=[1, "2", 3]
-```
-
-Like Resources and unlike JSON, it uses the packed array (`#!gdscript PackedInt32Array(1, 2, 3)`), typed array (`#!gdscript Array[StringName]([&"1", &"2", &"3"])`), and dictionary literals (`#!gdscript Dictionary[String, int({"hello": 2, "hi": 1 })`) where a typed value is provided. Also, using an empty string as the section name inserts the key into the top level.
-
-
-
-To save the ConfigFile's data to disk, you can use [`#!gdscript ConfigFile.save`](https://docs.godotengine.org/en/stable/classes/class_configfile.html#class-configfile-method-save) or one of its encrypted variants. While having this built-in encryption is *nice,* you can't save ConfigFiles to strings, only directly to a file, which limits its use cases. Of course, it's possible to make, save it to, and read it from a temp file but that's quite a bit more work. The built-in encrypted save methods are overshadowed by [`#!gdscript FileAccess.open_encrypted`](https://docs.godotengine.org/en/stable/classes/class_fileaccess.html#class-fileaccess-method-open-encrypted), which does effectively the same thing while being more flexible and much simpler.
-
-To get data back out of the serialized file, you can use [`#!gdscript ConfigFile.load`](https://docs.godotengine.org/en/stable/classes/class_configfile.html#class-configfile-method-load) or one the encrypted variant that matches how you saved it. Again with the encryption, `#!gdscript FileAccess.open_encrypted` is basically a superset of `#!gdscript ConfigFile`'s encryption facilities. There's also [`#!gdscript ConfigFile.parse`](https://docs.godotengine.org/en/stable/classes/class_configfile.html#class-configfile-method-parse), which *merges* the values of the given string into the `#!gdscript ConfigFile` object.
-
-I think ConfigFiles an interface best suited for serializing a bunch of ad-hoc values. It has an immediate-mode API that seems nice on the surface, but becomes clunky once your serialization code is spread further across more types and functions. My general way of serializing data is to make functions that return Dictionaries, which I then merge together in more dictionaries and arrays, building up the data as I go and ConfigFile doesn't really support that. However, INI files are *very* easy to user-edit. The section-key-value layout is easy to visually parse and doesn't require you to track indentation. In addition, ConfigFile supports **all** Variant types, unlike JSON.
-
-> Fun fact: the `project.godot` file uses a ConfigFile
 
 ## JSON
 
@@ -164,6 +91,79 @@ Believe it or not (I didn't know before writing this!), `#!gdscript JSON` inheri
 ### JSON, the conclusion
 
 Overall, JSON is a good pick for most serialization needs. It's easy to manipulate with tools like jq, many languages either have built-in support for JSON or very good third-party libraries, and it's very simple (looking at you [YAML](https://www.arp242.net/yaml-config.html#its-pretty-complex)). This simplicity comes at a cost of some niceties, such as a lack of comments, no trailing commas on serialization (this one actually makes me so mad), and keys can only be strings. All of these things make it more annoying to human-edit.
+
+## ConfigFile (INI)
+
+[`#!gdscript ConfigFile`](https://docs.godotengine.org/en/stable/classes/class_configfile.html) is Godot's [INI-style](https://en.wikipedia.org/wiki/INI_file) data serialization method. Its API is simple to use but somewhat lacking. Unlike JSON, it doesn't store structured objects like a Dictionary directly. Rather, each file is split into `[section]`s containing any number of `key=value` pairs. For example, this code
+
+```gdscript
+var config := ConfigFile.new()
+config.set_value("a section", "a value", "hi")
+```
+
+generates this file:
+
+```ini
+[a section]
+
+"a value"="hi"
+```
+
+Without any whitespace, escaped quotes, or `=` in the key, it generates without quotes:
+
+```ini
+a-value="hi"
+```
+
+You can also insert an entire `#!gdscript Dictionary` or `#!gdscript Array` as the value.
+
+```gdscript
+var typed_dict: Dictionary[String, int] = {
+    "hi": 1,
+    "hello": 2,
+}
+var packed_array: PackedInt32Array = [1, 2, 3]
+var typed_array: Array[StringName] = ["1", "2", "3"]
+var untyped_dict: Dictionary = {
+    "a": "b",
+    5: 10,
+}
+var untyped_array: Array = [1, "2", 3]
+config.set_value("", "typed_dict", typed_dict)
+config.set_value("", "packed_array", packed_array)
+config.set_value("", "typed_array", typed_array)
+config.set_value("untyped", "untyped_dict", untyped_dict)
+config.set_value("untyped", "untyped_array", untyped_array)
+```
+
+```ini
+typed_dict=Dictionary[String, int]({
+"hello": 2,
+"hi": 1
+})
+packed_array=PackedInt32Array(1, 2, 3)
+typed_array=Array[StringName]([&"1", &"2", &"3"])
+
+[untyped]
+
+untyped_dict={
+5: 10,
+"a": "b"
+}
+untyped_array=[1, "2", 3]
+```
+
+Like Resources and unlike JSON, it uses the packed array (`#!gdscript PackedInt32Array(1, 2, 3)`), typed array (`#!gdscript Array[StringName]([&"1", &"2", &"3"])`), and dictionary literals (`#!gdscript Dictionary[String, int({"hello": 2, "hi": 1 })`) where a typed value is provided. Also, using an empty string as the section name inserts the key into the top level.
+
+
+
+To save the ConfigFile's data to disk, you can use [`#!gdscript ConfigFile.save`](https://docs.godotengine.org/en/stable/classes/class_configfile.html#class-configfile-method-save) or one of its encrypted variants. While having this built-in encryption is *nice,* you can't save ConfigFiles to strings, only directly to a file, which limits its use cases. Of course, it's possible to make, save it to, and read it from a temp file but that's quite a bit more work. The built-in encrypted save methods are overshadowed by [`#!gdscript FileAccess.open_encrypted`](https://docs.godotengine.org/en/stable/classes/class_fileaccess.html#class-fileaccess-method-open-encrypted), which does effectively the same thing while being more flexible and much simpler.
+
+To get data back out of the serialized file, you can use [`#!gdscript ConfigFile.load`](https://docs.godotengine.org/en/stable/classes/class_configfile.html#class-configfile-method-load) or one the encrypted variant that matches how you saved it. Again with the encryption, `#!gdscript FileAccess.open_encrypted` is basically a superset of `#!gdscript ConfigFile`'s encryption facilities. There's also [`#!gdscript ConfigFile.parse`](https://docs.godotengine.org/en/stable/classes/class_configfile.html#class-configfile-method-parse), which *merges* the values of the given string into the `#!gdscript ConfigFile` object.
+
+I think ConfigFiles an interface best suited for serializing a bunch of ad-hoc values. It has an immediate-mode API that seems nice on the surface, but becomes clunky once your serialization code is spread further across more types and functions. My general way of serializing data is to make functions that return Dictionaries, which I then merge together in more dictionaries and arrays, building up the data as I go and ConfigFile doesn't really support that. However, INI files are *very* easy to user-edit. The section-key-value layout is easy to visually parse and doesn't require you to track indentation. In addition, ConfigFile supports **all** Variant types, unlike JSON.
+
+> Fun fact: the `project.godot` file uses a ConfigFile
 
 ## Resources
 
@@ -265,20 +265,17 @@ To serialize a Variant to a string, use [`#!gdscript var_to_str(variant)`](https
 
 If I'm looking for an easy way to serialize lots of data, I normally reach for [`#!gdscript var_to_bytes(variant)`](https://docs.godotengine.org/en/stable/classes/class_%40globalscope.html#class-globalscope-method-var-to-bytes).
 
+## Beyond the standard library
+
+There are even more options than explored here. For example, you could use a [SQLite](https://godotengine.org/asset-library/asset/1686) database for high-performance queries. You could use [YAML](https://godotengine.org/asset-library/asset/3774) or [TOML](https://godotengine.org/asset-library/asset/3395) for more exotic markup languages. You could write your own if the standard library's offerings didn't meet your requirements.
+
 ## Which one's the best?
 
 The one that's best depends entirely on your needs.
 
-I wouldn't recommend ever using ConfigFile for anything — its API is just so bad compared to the other options explored here.
-
-JSON is an industry standard well-rounded option. It's not specifically good for anything in particular, but it's widely used, many tools and languages accept it out of the box (except Java), and it's very well supported.
-
-Custom resources excel when you don't need the files to be easily human editable and you're okay with putting in a little more effort to set up the resource classes. Its API is *very* simple, however, the fact that they can't be serialized to a String directly can be limiting in some cases.
-
-var_to_str and var_to_bytes are just so simple and straightforward. They can be serialized directly into a string or to raw bytes, which can then be transmitted over the network, saved to a file, or shown to the user. They aren't as easily human-editable as JSON, nor do they have the industry support, but their convenience is unmatched.
+* I wouldn't recommend ever using ConfigFile for anything — its API is just so bad compared to the other options explored here.
+* JSON is an industry standard well-rounded option. It's not specifically good for anything in particular, but it's widely used, many tools and languages accept it out of the box (except Java), and it's very well supported.
+* Custom resources excel when you don't need the files to be easily human editable and you're okay with putting in a little more effort to set up the resource classes. Its API is *very* simple, however, the fact that they can't be serialized to a String directly can be limiting in some cases.
+* var_to_str and var_to_bytes are just so simple and straightforward. They can be serialized directly into a string or to raw bytes, which can then be transmitted over the network, saved to a file, or shown to the user. They aren't as easily human-editable as JSON, nor do they have the industry support, but their convenience is unmatched.
 
 For [sunfish](https://github.com/sockeye-d/sunfish), I use [`#!gdscript var_to_bytes(variant)`](https://docs.godotengine.org/en/stable/classes/class_%40globalscope.html#class-globalscope-method-var-to-bytes) in combination with zstd compression to save and load the project files, since it's so much simpler conceptually and practically to use.
-
-## Beyond the standard library
-
-There are even more options than explored here. For example, you could use a [SQLite](https://godotengine.org/asset-library/asset/1686) database for high-performance queries. You could use [YAML](https://godotengine.org/asset-library/asset/3774) or [TOML](https://godotengine.org/asset-library/asset/3395) for more exotic markup languages. You could write your own if you hated the rest of the options. While I'm satisfied with Godot's built-in options, you can always go further than this.
