@@ -5,7 +5,6 @@ description: >
 tags: [godot, gdscript]
 published-date: "2025-11-18T05:46:00Z"
 # comment-did: "at://did:plc:lkrhpzgaij74fjzqeimfyicc/app.bsky.feed.post/3m25udn7ey22f"
-hide: true
 ```
 
 Godot contains multiple ways to serialize data, each with their own positives and negatives. While this is subjective, I hope it gives some context as to which might be right for you.
