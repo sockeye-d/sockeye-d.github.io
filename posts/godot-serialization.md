@@ -8,15 +8,7 @@ published-date: "2025-11-17T20:12:00Z"
 hide: true
 ```
 
-<!--
-* INI: *very* simple configuration, annoying to set up, no API for serializing a Dictionary, etc.
-* YAML: very powerful configuration and easily human-read and written, good for configuration files you expect your user to edit, must be used through addons
-* JSON: in between, can serialized any Godot type into values consumable by third-party apps, somewhat easy to edit, very common
-* Custom resources: can serialize subresources, supports all Godot types, can potentially contain executable code (bad for save file sharing, for example)
-* `var_to_bytes`: Compact binary serialization, extremely hard to edit by a third party (but it can be done! Don't expect to make an "unhackable" save file with this)
-* `var_to_str`: similar to var_to_bytes and JSON, uses the same serialization method that custom resources do but it can't serialize subresources, semi-prettified output format but lacking indentation like JSON and YAML-->
-
-Godot contains multiple ways to serialize data to a String, each with their own positives and negatives. While this is subjective, I hope it gives some context as to which might be right for you.
+Godot contains multiple ways to serialize data, each with their own positives and negatives. While this is subjective, I hope it gives some context as to which might be right for you.
 
 ## ConfigFile (INI)
 
@@ -175,4 +167,118 @@ Overall, JSON is a good pick for most serialization needs. It's easy to manipula
 
 ## Resources
 
-The secret method Big Godot doesn't want you knowing about.
+> The secret method Big Godot doesn't want you knowing about.
+
+[`#!gdscript Resource`](https://docs.godotengine.org/en/stable/classes/class_resource.html)s are Godot's primary data serialization format. Most things in the filesystem are resources or get imported as resources, like how a JSON file gets imported to a JSON Resource. However, things like [scenes](https://docs.godotengine.org/en/stable/classes/class_packedscene.html), [themes](https://docs.godotengine.org/en/stable/classes/class_theme.html), and [curves](https://docs.godotengine.org/en/stable/classes/class_curve2d.html) *are* Resources rather than just being imported as resources. When you save one of those to the resource filesystem, it results in (normally) a `.tres` file containing all the data stored inside the resource object.
+
+While Godot comes with many built-in resource types, you can make your own simply by extending the Resource class:
+
+```gdscript
+extends Resource
+@export var property: String
+```
+
+By giving it a class name to make it a global class, it also shows up in the create resource dialogs:
+
+```gdscript
+class_name MyCustomResource extends Resource
+@export var property: String
+```
+
+Like [`#!gdscript Node`](https://docs.godotengine.org/en/stable/classes/class_node.html), you can use the different `#!gdscript @export` annotations to control how properties are displayed in the inspector. This gives Resources the unique attribute that not only can you serialize them to disk, Godot will auto-generate an editor for your resource from its script as well. You can even make it a tool script and implement custom validation logic:
+
+```gdscript
+@tool
+class_name MyCustomResource extends Resource
+@export var property: String:
+    set(value):
+        if not value.begins_with("h"):
+            return
+        property = value
+```
+
+> Like Nodes, `#!gdscript @export_storage` gives you a serialized but hidden property.
+
+Like ConfigFile and unlike JSON, Resources can serialize any type of Variant *including* other Resources.
+
+To save a resource, you can use [`#!gdscript ResourceSaver.save(resource, path = "", flags = 0)`](https://docs.godotengine.org/en/stable/classes/class_resourcesaver.html). `path` can be a resource filesystem (e.g. `res://`) path, which really only works for editors, or it can be an absolute path (either absolute absolute or `user://` path), or it can be empty (the default) to make `resource` get saved to wherever it was saved before. Saving a resource with a `.tres` file extension causes it to get saved in a text format, and `.res` makes it get saved in a binary format.
+
+To load a resource, you can use [`#!gdscript load(path)`](https://docs.godotengine.org/en/stable/classes/class_%40gdscript.html#class-gdscript-method-load). While it's normally used on `res://` paths, it can also be used to load external files.
+
+When you deserialize a custom resource, you get your custom resource type back, making accessing properties completely type safe:
+
+```gdscript
+var resource := MyCustomResource.new()
+resource.propery = "hello"
+ResourceSaver.save("/home/fish/my_custom_resource.tres", resource)
+
+# later...
+
+var resource := load("/home/fish/my_custom_resource.tres") as MyCustomResource
+print(resource.property)
+```
+
+> I'm not sure why there isn't a simple `#!gdscript save(resource, path)` counterpart to `#!gdscript load(path)`
+
+A Resource's safety makes it an incredibly powerful tool for data serialization. Almost all Godot constructs are supported by it, and you can choose between a verbose text format and a compact binary format, making it very versatile. However, you can only save resources to file paths, because each resource needs to "know" where it's serialized to to correctly serialize subresources. If you're concerned about portability, JSON is definitely better.
+
+Resource's text format, while not meant to be easily human editable, can be patched by hand. Its binary format on the other hand, is not easy to modify externally at all. If you're thinking about using this to add security to your save files, [**don't**](https://en.wikipedia.org/wiki/Security_through_obscurity). People will reverse engineer your formats anyway, especially because Godot's binary resource format's source can be [easily found](https://github.com/godotengine/godot/blob/master/core/io/resource_format_binary.cpp) and [reverse engineered](https://github.com/GDRETools/gdsdecomp).
+
+## var_to_str and var_to_bytes
+
+I like this function. It retains most of the good parts of JSON while sidestepping all the bad parts.
+
+As the name implies, it takes one Variant and converts it to a string. For example,
+
+```gdscript
+print(var_to_str(123))
+print(var_to_str([1, 2, 3]))
+var typed_array: Array[StringName] = ["1", "2", "3"]
+print(var_to_str(typed_array))
+var array = [1, "2", 3]
+print(var_to_str(array))
+print(var_to_str({ "a": "b", "c": "hello", 100: "hi", "nested": { "dictionaries": true } }))
+```
+
+results in
+
+```gdscript
+123
+[1, 2, 3]
+Array[StringName]([&"1", &"2", &"3"])
+[1, "2", 3]
+{
+100: "hi",
+"a": "b",
+"c": "hello",
+"nested": {
+"dictionaries": true
+}
+}
+```
+
+As you can see, it retains the typed literals of ConfigFile (they use the same system!), but is as simple and no-frills as JSON. If you want to serialize an array, just pass it an array. If you want to serialize some key/value pairs, just pass it a dictionary. And unlike JSON, it supports all types in Godot, even non-string map keys.
+
+To serialize a Variant to a string, use [`#!gdscript var_to_str(variant)`](https://docs.godotengine.org/en/stable/classes/class_%40globalscope.html#class-globalscope-method-var-to-str). If you want to convert a string to a Variant, use [`#!gdscript str_to_var(string)`](https://docs.godotengine.org/en/stable/classes/class_%40globalscope.html#class-globalscope-method-str-to-var). It's as simple as JSON, but much more powerful.
+
+[`#!gdscript var_to_bytes(variant)`](https://docs.godotengine.org/en/stable/classes/class_%40globalscope.html#class-globalscope-method-var-to-bytes) and [`#!gdscript bytes_to_var(variant)`](https://docs.godotengine.org/en/stable/classes/class_%40globalscope.html#class-globalscope-method-bytes-to-var) work the same as their string siblings, but use a PackedByteArray instead of a String. The returned value is much more compact, using the binary format specified in ["Binary serialization API"](https://docs.godotengine.org/en/stable/tutorials/io/binary_serialization_api.html). Again, it's not a good security practice to rely on the fact that it's a binary format to avoid reverse engineering. [`#!gdscript var_to_bytes_with_objects(variant)`](https://docs.godotengine.org/en/stable/classes/class_%40globalscope.html#class-globalscope-method-var-to-bytes-with-objects) and [`#!gdscript bytes_to_var_with_objects(bytes)`](https://docs.godotengine.org/en/stable/classes/class_%40globalscope.html#class-globalscope-method-bytes-to-var-with-objects) are effectively the same, but they serialize scripts as well. This can create security issues as embedding scripts allow them to execute arbitrary code on deserialization. I'd just avoid these methods.
+
+If I'm looking for an easy way to serialize lots of data, I normally reach for [`#!gdscript var_to_bytes(variant)`](https://docs.godotengine.org/en/stable/classes/class_%40globalscope.html#class-globalscope-method-var-to-bytes).
+
+## Which one's the best?
+
+The one that's best depends entirely on your needs.
+
+I wouldn't recommend ever using ConfigFile for anything — its API is just so bad compared to the other options explored here.
+
+JSON is an industry standard well-rounded option. It's not specifically good for anything in particular, but it's widely used, many tools and languages accept it out of the box (except Java), and it's very well supported.
+
+Custom resources excel when you don't need the files to be easily human editable and you're okay with putting in a little more effort to set up the resource classes. Its API is *very* simple, however, the fact that they can't be serialized to a String directly can be limiting in some cases.
+
+var_to_str and var_to_bytes are just so simple and straightforward. They can be serialized directly into a string or to raw bytes, which can then be transmitted over the network, saved to a file, or shown to the user. They aren't as easily human-editable as JSON, nor do they have the industry support, but their convenience is unmatched.
+
+For [sunfish](https://github.com/sockeye-d/sunfish), I use [`#!gdscript var_to_bytes(variant)`](https://docs.godotengine.org/en/stable/classes/class_%40globalscope.html#class-globalscope-method-var-to-bytes) in combination with zstd compression to save and load the project files, since it's so much simpler conceptually and practically to use.
+
+## Beyond the standard library
+
+There are even more options than explored here. For example, you could use a [SQLite](https://godotengine.org/asset-library/asset/1686) database for high-performance queries. You could use [YAML](https://godotengine.org/asset-library/asset/3774) or [TOML](https://godotengine.org/asset-library/asset/3395) for more exotic markup languages. You could write your own if you hated the rest of the options. While I'm satisfied with Godot's built-in options, you can always go further than this.

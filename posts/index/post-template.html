@@ -29,7 +29,16 @@
         <?kt @file:Import tags.joinToString("", transform = ::tagHtml) ?>
     </div>
     <?kt content ?>
-    <h2 id="comments">Comments <a href="<?kt@file:Import; commentDid.toBskyAppLink() ?>">(reply on Bluesky)</a></h2>
+    <h2 id="comments">Comments <?kt@file:Import;
+    if (commentDid != null)
+        "a" ("href" to commentDid.toBskyAppLink()) {
+            append("(reply on Bluesky)")
+        }
+    else
+        "span" ("class" to "subtext") {
+            append("(Bluesky link coming soon)")
+        }
+    ?></h2>
     <!-- URIs are like basically already XML encoded -->
     <div id="comments-container" atproto-path="<?kt commentDid ?>"></div>
 </content>

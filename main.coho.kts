@@ -120,7 +120,9 @@ root {
     cp(src("favicon.svg"))
     cp(src("favicon.ico"))
     path("projects") {
-        source.files("*.md").forEach { md(it) }
+        if (!onlyLatestPost) {
+            source.files("*.md").forEach { md(it) }
+        }
     }
     path("fonts") {
         source.files().forEach { cp(src(it.name)) }
