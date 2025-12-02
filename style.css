@@ -89,15 +89,23 @@ body {
 }
 
 content {
-    padding: 0.5rem;
+    padding: 0.5rem 2.0rem;
     background-color: var(--base);
-    border-radius: 0.5rem;
-    flex: 1 1 auto;
+    border-radius: 0 0 0.5rem 0.5rem;
+    flex: 1 0 auto;
+    max-width: 80rem;
+    width: min(80rem, calc(100% - 4.0rem));
+    align-self: center;
+}
+
+@media(max-width: 80rem) {
+    content {
+        padding: 0.5rem 0.5rem;
+        width: min(80rem, calc(100% - 1.0rem));
+    }
 }
 
 pre.codeblock {
-    /*     white-space: pre-wrap; */
-    /*     overflow-wrap: break-word; */
     overflow-x: scroll;
     background-color: var(--mantle);
     margin: 1rem;

@@ -73,7 +73,6 @@ async function populateComments() {
     }
 
     const comments = (await commentsResponse.json()).thread;
-    console.log(comments);
 
     const replies = comments.replies;
     if (replies.length === 0) {
