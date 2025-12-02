@@ -16,14 +16,7 @@ This makes it significantly more flexible than existing solutions, since you bas
 
 > For more details about it, you can read my blog post [here](/posts/coho.md)
 
-
-Would be nice to be able to just drop a $\frac{2}{5}$ in a sentence
-
-$$
-\begin{aligned} x^5 &= 15 \\ x &= 15^{\frac{1}{5}} \end{aligned}
-$$
-
-Its main feature is $ 2 $ being able to template HTML by embedding Kotlin code directly inside it.
+Its main feature is being able to template HTML by embedding Kotlin code directly inside it.
 It's like PHP, but it runs once at build time to generate the output HTML files.
 For example, this is the [posts page's source](/posts/):
 ```kthtml
